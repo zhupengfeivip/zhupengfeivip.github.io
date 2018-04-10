@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://zhupengfeivip.github.io/"/>
-  <updated>2018-04-10T10:29:23.227Z</updated>
+  <updated>2018-04-10T11:50:24.419Z</updated>
   <id>https://zhupengfeivip.github.io/</id>
   
   <author>
@@ -17,11 +17,11 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
-    <title>Hello World</title>
+    <title>Hexo使用</title>
     <link href="https://zhupengfeivip.github.io//posts/16107/"/>
     <id>https://zhupengfeivip.github.io//posts/16107/</id>
-    <published>2018-04-10T05:51:50.090Z</published>
-    <updated>2018-04-10T10:29:23.227Z</updated>
+    <published>2018-04-10T11:31:41.000Z</published>
+    <updated>2018-04-10T11:50:24.419Z</updated>
     
     <content type="html"><![CDATA[<p>Welcome to <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="noopener">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="noopener">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="noopener">GitHub</a>.</p><h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">"My New Post"</span></span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="noopener">Writing</a></p><h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="noopener">Server</a></p><h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="noopener">Generating</a></p><h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/deployment.html" target="_blank" rel="noopener">Deployment</a></p>]]></content>
     
@@ -34,6 +34,35 @@
     
     </summary>
     
+      <category term="开发" scheme="https://zhupengfeivip.github.io/categories/%E5%BC%80%E5%8F%91/"/>
+    
+    
+      <category term="hexo" scheme="https://zhupengfeivip.github.io/tags/hexo/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>配置git的ssh密钥</title>
+    <link href="https://zhupengfeivip.github.io//posts/a6a3fa60/"/>
+    <id>https://zhupengfeivip.github.io//posts/a6a3fa60/</id>
+    <published>2018-04-10T11:31:41.000Z</published>
+    <updated>2018-04-10T11:50:08.406Z</updated>
+    
+    <content type="html"><![CDATA[<p>zhupengfei@bonn-pc MINGW64 /d/Users/zhupengfei/.ssh<br>$ ssh-keygen -t rsa -C “<a href="mailto:zhupengfeivip@163.com" target="_blank" rel="noopener">zhupengfeivip@163.com</a>“<br>之后一直点回车即可，大概是三次回车。<br>Generating public/private rsa key pair.<br>Enter file in which to save the key (/c/Users/zhupengfei/.ssh/id_rsa):<br>Enter passphrase (empty for no passphrase):<br>Enter same passphrase again:<br>Your identification has been saved in /c/Users/zhupengfei/.ssh/id_rsa.<br>Your public key has been saved in /c/Users/zhupengfei/.ssh/id_rsa.pub.<br>The key fingerprint is:<br>SHA256:ZOomdySnm2qE/pOIl6x8D7C/u/WBqlE4FTP+J271L9Q <a href="mailto:zhupengfeivip@163.com" target="_blank" rel="noopener">zhupengfeivip@163.com</a><br>The key’s randomart image is:<br>+—[RSA 2048]—-+<br>|   +             |<br>|  . +            |<br>|   o    o        |<br>|  o .  +         |<br>| + o oooS .      |<br>|  <em> o.==.. E     |<br>| </em> =.*=.o.       |<br>|o O.O+.+…      |<br>|.=oOB+o.  ..     |<br>+—-[SHA256]—–+</p><p>zhupengfei@bonn-pc MINGW64 /d/Users/zhupengfei/.ssh<br>$ ssh -T <a href="mailto:zhupengfeivip@163.com" target="_blank" rel="noopener">zhupengfeivip@163.com</a><br>ssh: connect to host 163.com port 22: Connection timed out</p><p>zhupengfei@bonn-pc MINGW64 /d/Users/zhupengfei/.ssh<br>$ ssh -T <a href="mailto:git@github.com" target="_blank" rel="noopener">git@github.com</a><br>Hi zhupengfeivip! You’ve successfully authenticated, but GitHub does not provide                                     shell access.</p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;zhupengfei@bonn-pc MINGW64 /d/Users/zhupengfei/.ssh&lt;br&gt;$ ssh-keygen -t rsa -C “&lt;a href=&quot;mailto:zhupengfeivip@163.com&quot; target=&quot;_blank&quot; rel
+      
+    
+    </summary>
+    
+      <category term="开发" scheme="https://zhupengfeivip.github.io/categories/%E5%BC%80%E5%8F%91/"/>
+    
+    
+      <category term="git" scheme="https://zhupengfeivip.github.io/tags/git/"/>
     
   </entry>
   
@@ -42,7 +71,7 @@
     <link href="https://zhupengfeivip.github.io//posts/41644/"/>
     <id>https://zhupengfeivip.github.io//posts/41644/</id>
     <published>2018-04-10T05:15:08.000Z</published>
-    <updated>2018-04-10T10:29:23.226Z</updated>
+    <updated>2018-04-10T11:50:26.820Z</updated>
     
     <content type="html"><![CDATA[<p>Welcome to <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="noopener">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="noopener">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="noopener">GitHub</a>.</p>]]></content>
     
@@ -54,6 +83,8 @@
       
     
     </summary>
+    
+      <category term="开发" scheme="https://zhupengfeivip.github.io/categories/%E5%BC%80%E5%8F%91/"/>
     
     
       <category term="hexo" scheme="https://zhupengfeivip.github.io/tags/hexo/"/>
