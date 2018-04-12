@@ -41,18 +41,18 @@
 
 
     
-    <meta name="description" content="Welcome to Hexo! This is your very first post. Check documentation for more info. If you get any problems when using Hexo, you can find the answer in troubleshooting or you can ask me on GitHub.">
+    <meta name="description" content="hexoWelcome to Hexo! This is your very first post. Check documentation for more info. If you get any problems when using Hexo, you can find the answer in troubleshooting or you can ask me on GitHub.">
 <meta name="keywords" content="hexo">
 <meta property="og:type" content="article">
 <meta property="og:title" content="使用hexo开通博客">
 <meta property="og:url" content="https://zhupengfeivip.github.io/posts/41644/index.html">
 <meta property="og:site_name" content="朱鹏飞的个人博客">
-<meta property="og:description" content="Welcome to Hexo! This is your very first post. Check documentation for more info. If you get any problems when using Hexo, you can find the answer in troubleshooting or you can ask me on GitHub.">
+<meta property="og:description" content="hexoWelcome to Hexo! This is your very first post. Check documentation for more info. If you get any problems when using Hexo, you can find the answer in troubleshooting or you can ask me on GitHub.">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2018-04-10T11:50:26.820Z">
+<meta property="og:updated_time" content="2018-04-11T01:03:12.231Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="使用hexo开通博客">
-<meta name="twitter:description" content="Welcome to Hexo! This is your very first post. Check documentation for more info. If you get any problems when using Hexo, you can find the answer in troubleshooting or you can ask me on GitHub.">
+<meta name="twitter:description" content="hexoWelcome to Hexo! This is your very first post. Check documentation for more info. If you get any problems when using Hexo, you can find the answer in troubleshooting or you can ask me on GitHub.">
     
         <link rel="alternate" type="application/atom+xml" title="朱鹏飞的个人博客" href="/atom.xml">
     
@@ -191,6 +191,13 @@
 
 <div class="container body-wrap">
     
+    <aside class="post-widget">
+        <nav class="post-toc-wrap" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#hexo"><span class="post-toc-number">1.</span> <span class="post-toc-text">hexo</span></a></li></ol>
+        </nav>
+    </aside>
+   
 <article id="post-使用hexo开通博客"
   class="post-article article-type-post fade" itemprop="blogPost">
 
@@ -220,7 +227,7 @@
             阅读本文可能花费您&nbsp;<span class="post-count">1</span>&nbsp;分钟
         </div>
         <div class="post-content" id="post-content" itemprop="postContent">
-            <p>Welcome to <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="noopener">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="noopener">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="noopener">GitHub</a>.</p>
+            <h1 id="hexo"><a href="#hexo" class="headerlink" title="hexo"></a>hexo</h1><p>Welcome to <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="noopener">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="noopener">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="noopener">GitHub</a>.</p>
 
         </div>
 
@@ -228,7 +235,7 @@
     <div class="content">
         
 <span class="post-time">
-    post.last_updated<time datetime="2018-04-10T11:50:26.820Z" itemprop="dateUpdated">2018-04-10 19:50:26</time>
+    post.last_updated<time datetime="2018-04-11T01:03:12.231Z" itemprop="dateUpdated">2018-04-11 09:03:12</time>
 </span>
 
 
@@ -332,6 +339,30 @@
     
 
     
+    <!-- Valine Comments -->
+    <div class="comments vcomment" id="comments"></div>
+    <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+    <script src="//unpkg.com/valine@latest/dist/Valine.min.js"></script>
+    <!-- Valine Comments script -->
+    <script>
+        var GUEST_INFO = ['nick','mail','link'];
+        var guest_info = 'nick,mail,link'.split(',').filter(function(item){
+          return GUEST_INFO.indexOf(item) > -1
+        });
+        new Valine({
+            el: '#comments',
+            notify: 'false' == 'true',
+            verify: 'false' == 'true',
+            appId: "sHof5iEWmqJTbIJ3Mu8gEIH9-gzGzoHsz",
+            appKey: "fJytLj2JR217SjQ82lj4GOpK",
+            avatar: "mm",
+            placeholder: "Just go go",
+            guest_info: guest_info.length == 0 ? GUEST_INFO : guest_info,
+            pageSize: "10"
+        })
+    </script>
+    <!-- Valine Comments end -->
+
 
 
 </article>
