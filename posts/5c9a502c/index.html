@@ -41,14 +41,14 @@
 
 
     
-    <meta name="description" content="M1卡区块控制位详解 每个扇区的密码和存取控制都是独立的，可以根据实际需要设定各自的密码及存取 控制。存取控制为4个字节，共32位，扇区中的每个块（包括数据块和控制块）的存取条件是由密码和存取控制共同决定的，在存取控制中每个块都有相应的三个控制位,定义如下：块0：   C10   C20   C30块1：   C11   C21   C31块2：   C12   C22   C32块3：   C1">
+    <meta name="description" content="M1卡区块控制位详解">
 <meta name="keywords" content="mf1 加密">
 <meta property="og:type" content="article">
 <meta property="og:title" content="M1卡区块控制位详解">
 <meta property="og:url" content="https://zhupengfeivip.github.io/posts/5c9a502c/index.html">
 <meta property="og:site_name" content="朱鹏飞的个人博客">
-<meta property="og:description" content="M1卡区块控制位详解 每个扇区的密码和存取控制都是独立的，可以根据实际需要设定各自的密码及存取 控制。存取控制为4个字节，共32位，扇区中的每个块（包括数据块和控制块）的存取条件是由密码和存取控制共同决定的，在存取控制中每个块都有相应的三个控制位,定义如下：块0：   C10   C20   C30块1：   C11   C21   C31块2：   C12   C22   C32块3：   C1">
-<meta property="og:locale" content="default">
+<meta property="og:description" content="M1卡区块控制位详解">
+<meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="https://zhupengfeivip.github.io/img/5c9a502c/1.png">
 <meta property="og:image" content="https://zhupengfeivip.github.io/img/5c9a502c/2.png">
 <meta property="og:image" content="https://zhupengfeivip.github.io/img/5c9a502c/3.png">
@@ -61,10 +61,10 @@
 <meta property="og:image" content="https://zhupengfeivip.github.io/img/5c9a502c/10.png">
 <meta property="og:image" content="https://zhupengfeivip.github.io/img/5c9a502c/11.png">
 <meta property="og:image" content="https://zhupengfeivip.github.io/img/5c9a502c/12.png">
-<meta property="og:updated_time" content="2018-04-13T05:22:15.479Z">
+<meta property="og:updated_time" content="2018-04-16T04:39:16.332Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="M1卡区块控制位详解">
-<meta name="twitter:description" content="M1卡区块控制位详解 每个扇区的密码和存取控制都是独立的，可以根据实际需要设定各自的密码及存取 控制。存取控制为4个字节，共32位，扇区中的每个块（包括数据块和控制块）的存取条件是由密码和存取控制共同决定的，在存取控制中每个块都有相应的三个控制位,定义如下：块0：   C10   C20   C30块1：   C11   C21   C31块2：   C12   C22   C32块3：   C1">
+<meta name="twitter:description" content="M1卡区块控制位详解">
 <meta name="twitter:image" content="https://zhupengfeivip.github.io/img/5c9a502c/1.png">
     
         <link rel="alternate" type="application/atom+xml" title="朱鹏飞的个人博客" href="/atom.xml">
@@ -173,7 +173,7 @@
             <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
                 <i class="icon icon-lg icon-chevron-left"></i>
             </a>
-            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="global.search_input_hint">
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入感兴趣的关键字">
             <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
                 <i class="icon icon-lg icon-search"></i>
             </a>
@@ -233,8 +233,7 @@
             阅读本文可能花费您&nbsp;<span class="post-count">9</span>&nbsp;分钟
         </div>
         <div class="post-content" id="post-content" itemprop="postContent">
-            <p>M1卡区块控制位详解</p>
-<p>每个扇区的密码和存取控制都是独立的，可以根据实际需要设定各自的密码及存取 控制。存取控制为4个字节，共32位，扇区中的每个块（包括数据块和控制块）的存取条件是由密码和存取控制共同决定的，在存取控制中每个块都有相应的三个控制位,定义如下：<br>块0：   C10   C20   C30<br>块1：   C11   C21   C31<br>块2：   C12   C22   C32<br>块3：   C13   C23   C33<br>三个控制位以正和反两种形式存在于存取控制字节中，决定了该块的访问权限（如     进行减值操作必须验证KEY A，进行加值操作必须验证KEY B，等等）。三个控制   位在存取控制字节中的位置，以块0为例：<br><img src="/img/5c9a502c/1.png"></p>
+            <p>M1卡区块控制位详解<br><a id="more"></a><br>每个扇区的密码和存取控制都是独立的，可以根据实际需要设定各自的密码及存取 控制。存取控制为4个字节，共32位，扇区中的每个块（包括数据块和控制块）的存取条件是由密码和存取控制共同决定的，在存取控制中每个块都有相应的三个控制位,定义如下：<br>块0：   C10   C20   C30<br>块1：   C11   C21   C31<br>块2：   C12   C22   C32<br>块3：   C13   C23   C33<br>三个控制位以正和反两种形式存在于存取控制字节中，决定了该块的访问权限（如     进行减值操作必须验证KEY A，进行加值操作必须验证KEY B，等等）。三个控制   位在存取控制字节中的位置，以块0为例：<br><img src="/img/5c9a502c/1.png"></p>
 <font color="red">注意高字节和低字节顺序不同。</font>
 
 
@@ -275,7 +274,7 @@
     <div class="content">
         
 <span class="post-time">
-    post.last_updated<time datetime="2018-04-13T05:22:15.479Z" itemprop="dateUpdated">2018-04-13 13:22:15</time>
+    最后更新：<time datetime="2018-04-16T04:39:16.332Z" itemprop="dateUpdated">2018-04-16 12:39:16</time>
 </span>
 
 
@@ -322,7 +321,7 @@
         </a>
       </li>
       <li>
-        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://zhupengfeivip.github.io/posts/5c9a502c/&title=《M1卡区块控制位详解》 — 朱鹏飞的个人博客&source=我是一个勤劳的码农！" data-title=" QQ">
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://zhupengfeivip.github.io/posts/5c9a502c/&title=《M1卡区块控制位详解》 — 朱鹏飞的个人博客&source=M1卡区块控制位详解" data-title=" QQ">
           <i class="icon icon-qq"></i>
         </a>
       </li>
@@ -362,8 +361,8 @@
 
   
     <div class="waves-block waves-effect next">
-      <a href="/posts/16107/" id="post-next" class="post-nav-link">
-        <h4 class="title" data-hover="下一篇：Hexo使用">下一篇：Hexo使用</h4>
+      <a href="/posts/a6a3fa60/" id="post-next" class="post-nav-link">
+        <h4 class="title" data-hover="下一篇：配置git的ssh密钥">下一篇：配置git的ssh密钥</h4>
       </a>
     </div>
   
@@ -443,7 +442,7 @@
         </span>
         <br/>
 
-        <span class="license">footer.license</span>
+        <span class="license"><a  target="_blank" rel="license" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">博客内容遵循 知识共享 署名 - 非商业性 - 相同方式共享 4.0 国际协议</a></span>
     </div>
 </footer>
 
@@ -496,7 +495,7 @@
         </a>
       </li>
       <li>
-        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://zhupengfeivip.github.io/posts/5c9a502c/&title=《M1卡区块控制位详解》 — 朱鹏飞的个人博客&source=我是一个勤劳的码农！" data-title=" QQ">
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://zhupengfeivip.github.io/posts/5c9a502c/&title=《M1卡区块控制位详解》 — 朱鹏飞的个人博客&source=M1卡区块控制位详解" data-title=" QQ">
           <i class="icon icon-qq"></i>
         </a>
       </li>
