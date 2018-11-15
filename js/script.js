@@ -1,717 +1,529 @@
-/* 文字跳动 */
-jQuery.easing["jswing"] = jQuery.easing["swing"];
-jQuery.extend(jQuery.easing, {
-    def: "easeOutQuad",
+/*声明三个自定义js方法*/
+/*不区分大小写的判断包含， 用于搜索文章标题过滤文章*/
+jQuery.expr[':'].contains = function (a, i, m) {
+    return jQuery(a).text().toUpperCase()
+            .indexOf(m[3].toUpperCase()) >= 0;
+};
+/*区分大小写，用于搜索标签过滤文章*/
+jQuery.expr[':'].contains_tag = function (a, i, m) {
+    var tags = jQuery(a).data("tag").split(",");
+    return $.inArray(m[3], tags) != -1;
+};
+/*区分大小写，用于搜索作者过滤文章*/
+jQuery.expr[':'].contains_author = function (a, i, m) {
+    var tags = jQuery(a).data("author").split(",");
+    return $.inArray(m[3], tags) != -1;
+};
 
-    easeOutCubic: function (x, t, b, c, d) {
-        return c * ((t = t / d - 1) * t * t + 1) + b;
+/*使用pjax加载页面，速度更快，交互更友好*/
+var content = $(".pjax");
+var container = $(".post");
+$(document).pjax('.nav-right nav a,.nav-left .avatar_target,.site_url', '.pjax', {fragment: '.pjax', timeout: 8000});
+$(document).on({
+    /*点击链接后触发的事件*/
+    'pjax:click': function () {
+        /*原有内容淡出*/
+        content.removeClass('fadeIns').addClass('fadeOuts');
+        /*请求进度条*/
+        NProgress.start();
     },
-    easeOutBounce: function (x, t, b, c, d) {
-        if ((t /= d) < 1 / 2.75) {
-            return c * (7.5625 * t * t) + b;
-        } else if (t < 2 / 2.75) {
-            return c * (7.5625 * (t -= 1.5 / 2.75) * t + 0.75) + b;
-        } else if (t < 2.5 / 2.75) {
-            return c * (7.5625 * (t -= 2.25 / 2.75) * t + 0.9375) + b;
-        }
-        return c * (7.5625 * (t -= 2.625 / 2.75) * t + 0.984375) + b;
 
+    /*pjax开始请求页面时触发的事件*/
+    'pjax:start': function () {
+        content.css({'opacity': 0});
+    },
+
+    /*pjax请求回来页面后触发的事件*/
+    'pjax:end': function () {
+        NProgress.done();
+        container.scrollTop(0);
+        afterPjax();
+
+        /*移动端打开文章后，自动隐藏文章列表*/
+        if ($(window).width() <= 1024) {
+            $(".full-toc .full").trigger("click");
+        }
+    }
+});
+function afterPjax() {
+    /*渲染MathJax数学公式*/
+    if($("script[type='text/x-mathjax-config']").length>0){
+        $.getScript($("#MathJax-js").val(),function () {
+            MathJax.Hub.Queue(
+                ["resetEquationNumbers",MathJax.InputJax.TeX],
+                ["Typeset",MathJax.Hub]
+            );
+        });
+    }
+
+    /*渲染高亮代码块结构与样式*/
+    $('pre code').each(function (i, block) {
+        hljs.highlightBlock(block);
+    });
+    /*新内容淡入*/
+    content.css({'opacity': 1}).removeClass('fadeOuts').addClass('fadeIns');
+    bind();
+    /*discus获取评论数*/
+    if ($(".theme_disqus_on").val() == "true") {
+        DISQUSWIDGETS.getCount({reset: true});
+    }
+    if ($("#comments").hasClass("disqus")) {
+        setTimeout(function () {
+            if ($(".count-comment").text().trim() == "") {
+                $(".count-comment").text(0);
+            }
+        }, 300);
+    }
+}
+
+/*切换文章分类*/
+$(".nav-left ul li").on("click", function (e) {
+    $('.friend').removeClass('friend');
+    $(".nav-right form .search").val("").change();
+    $(this).siblings(".active").removeClass("active");
+    $(this).addClass("active");
+    var $handle = $(".nav-right nav a");
+    if ($(this).hasClass("all")) {
+        $handle.css("display", "block");
+    } else {
+        $handle.css("display", "none");
+        $(".nav-right").find("." + $(this).data("rel") + "").css("display", "block");
     }
 });
 
-(function ($) {
-    $.fn.bumpyText = function (options) {
-        const defaults = {
-            bounceHeight: "1.3em",
-            bounceUpDuration: 500,
-            bounceDownDuration: 700
-        };
-        options = $.extend(defaults, options);
-        return this.each(function () {
-            const obj = $(this);
-            if (obj.text() !== obj.html()) {
-                return;
+/*鼠标移出文章列表后，去掉文章标题hover样式*/
+$(".nav-right nav a").mouseenter(function (e) {
+    $(".nav-right nav a.hover").removeClass("hover");
+    $(this).addClass("hover");
+});
+$(".nav-right nav a").mouseleave(function (e) {
+    $(this).removeClass("hover");
+});
+
+/*快捷键/组合键*/
+var publickey = {"shift": false, "ctrl": false, "alt": false, "last": 0};
+$(document).keydown(function (e) {
+    var tobottom = container.prop("scrollHeight") - container.scrollTop() - container.height();
+    var totop = container.scrollTop();
+    if (!$(".nav-right form .search").is(":focus") && !$('#comments textarea').is(':focus')) {
+        if (e.keyCode == 74) { /* J */
+            container.animate({scrollTop: container.prop("scrollHeight") - container.height()}, tobottom, "linear");
+        } else if (e.keyCode == 75) { /* K */
+            container.animate({scrollTop: 0}, totop, "linear");
+        } else if (e.keyCode == 71) { /* G */
+            if (publickey.shift) {
+                container.animate({scrollTop: container.prop("scrollHeight")}, 800);
+            } else if (publickey.last == 71) { /* G */
+                container.animate({scrollTop: 0}, 800);
             }
-            const text = obj.text();
-            let newMarkup = "";
-            for (let i = 0; i <= text.length; i++) {
-                const character = text.slice(i, i + 1);
-                newMarkup += $.trim(character) ? `<span class="bumpy-char">${ character }</span>` : character;
+        } else if (e.keyCode == 16) { /* shift */
+            publickey.shift = true;
+        }
+    }
+})
+
+$(document).keyup(function (e) {
+    if (!$(".nav-right form .search").is(":focus") && !$('#comments textarea').is(':focus')) {
+        if (e.keyCode == 83) { /* S - 显示/隐藏文章列表 */
+            $(".full-toc .full").trigger("click");
+        } else if (e.keyCode == 73 && ($(".nav").css('margin-left')=='0px') && !$('.title-list').hasClass('friend')) { /* I */
+            $(".nav-right form .search").focus();
+        } else if (e.keyCode == 87) { /* W - 显示/隐藏文章目录 */
+            $(".full-toc .post-toc-menu").trigger("click");
+        } else if (e.keyCode == 74 || e.keyCode == 75) { /* J K - 上滑/下滑*/
+            container.stop(true);
+        } else if (e.keyCode == 16) {
+            publickey.shift = false;
+        }
+    }
+    publickey.last = e.keyCode;
+})
+
+$(".nav-right form .search").blur(function (e) {
+    $(".nav-right nav a.hover").removeClass("hover");
+})
+/*输入框焦点时的快捷键捕获*/
+$(".nav-right form .search").keydown(function (e) {
+    if ($(".nav-right nav a:not(:hidden), #local-search-result a:not(:hidden)").length > 0 && !$(".ac").is(":visible")) {
+        if (e.which == 13) { /* 回车 */
+            var $handle = $(".nav-right nav a.hover:not(:hidden), #local-search-result a.hover:not(:hidden)");
+            if ($handle.length == 0) {
+                $(".nav-right nav a:not(:hidden):first, #local-search-result a:not(:hidden):first").trigger("click");
+            } else {
+                $handle.trigger("click");
             }
-            obj.html(newMarkup);
-            obj.find("span.bumpy-char").each(function () {
-                $(this).mouseover(function () {
-                    $(this).animate({
-                        bottom: options.bounceHeight
-                    }, {
-                        queue: false,
-                        duration: options.bounceUpDuration,
-                        easing: "easeOutCubic",
-                        complete: function () {
-                            $(this).animate({
-                                bottom: 0
-                            }, {
-                                queue: false,
-                                duration: options.bounceDownDuration,
-                                easing: "easeOutBounce"
-                            });
+            $(':focus').blur();
+        } else if (e.which == 38) { /* 上 */
+            if (!$('nav').is(':visible')) {
+                if ($('#local-search-result a.hover').length == 0 || $('#local-search-result a.hover').parent().prevAll(":visible").length == 0) {
+                    $("#local-search-result").scrollTop($("#local-search-result").prop("scrollHeight"));
+                    $("#local-search-result a.hover").removeClass("hover");
+                    $("#local-search-result a:visible:last").addClass("hover");
+                } else {
+                    $("#local-search-result a.hover").parent().prevAll().each(function () {
+                        if ($(this).is(":visible")) {
+                            $("#local-search-result a.hover").removeClass("hover");
+                            $(this).children().addClass("hover");
+                            if (($(this).offset().top) - $(".nav-right form").height() < 0) {
+                                $("#local-search-result").scrollTop($("#local-search-result").scrollTop() - $(this).height());
+                            }
+                            return false;
                         }
-                    });
-                });
-            });
-        });
-    };
-}(jQuery));
-
-/* 文字音效 */
-function elasticText() {
-    const args = arguments;
-    const EventUtil = {
-        e: "",
-        gEve: function (event) {
-            this.e = event ? event : window.event;
-            return this;
-        },
-        getEvent: function (event) {
-            return event ? event : window.event;
-        },
-        ce: function (e, callback) {
-            if (e) {
-                return callback(e);
-            }
-            return callback(this.e);
-
-        },
-        addHandler: function (ele, type, handler) {
-            if (ele.addEventListener) {
-                ele.addEventListener(type, handler, false);
-            } else if (ele.attachEvent) {
-                ele.attachEvent(`on${ type}`, handler);
+                    })
+                }
             } else {
-                ele[`on${ type}`] = handler;
+                if ($("nav a:visible.hover").length == 0 || $("nav a:visible.hover").prevAll(":visible").length == 0) {
+                    $("nav").scrollTop($("nav").prop("scrollHeight"));
+                    $(".nav-right nav a.hover").removeClass("hover");
+                    $(".nav-right nav a:visible:last").addClass("hover");
+                } else {
+                    $("nav a.hover").prevAll().each(function () {
+                        if ($(this).is(":visible")) {
+                            $(".nav-right nav a.hover").removeClass("hover");
+                            $(this).addClass("hover");
+                            if (($(this).offset().top) - $(".nav-right form").height() < 0) {
+                                $("nav").scrollTop($("nav").scrollTop() - $(this).height());
+                            }
+                            return false;
+                        }
+                    })
+                }
             }
-        },
-        removeHandler: function (ele, type, handler) {
-            if (ele.removeEventListener) {
-                ele.removeEventListener(type, handler, false);
-            } else if (ele.detachEvent) {
-                ele.detachEvent(`on${ type}`, handler);
+        } else if (e.which==9 || e.which == 40) { /* 下 */
+            if ($('nav').is(':visible')) {
+                if ($("nav a:visible.hover").length == 0 || $("nav a:visible.hover").nextAll(":visible").length == 0) {
+                    $("nav").scrollTop(0);
+                    $(".nav-right nav a.hover").removeClass("hover");
+                    $(".nav-right nav a:visible:first").addClass("hover");
+                } else {
+                    $("nav a.hover").nextAll().each(function () {
+                        if ($(this).is(":visible")) {
+                            $(".nav-right nav a.hover").removeClass("hover");
+                            $(this).addClass("hover");
+                            if (($("nav").height() + $(".nav-right form").height() - $(this).offset().top) < 20) {
+                                $("nav").scrollTop($("nav").scrollTop() + $(this).height());
+                            }
+                            return false;
+                        }
+                    })
+                }
             } else {
-                ele[`on${ type}`] = null;
+                if ($("#local-search-result a:visible.hover").length == 0 || $("#local-search-result a:visible.hover").parent().nextAll(":visible").length == 0) {
+                    $("#local-search-result").scrollTop(0);
+                    $("#local-search-result a.hover").removeClass("hover");
+                    $("#local-search-result a:visible:first").addClass("hover");
+                } else {
+                    $("#local-search-result a.hover").parent().nextAll().each(function () {
+                        if ($(this).is(":visible")) {
+                            $("#local-search-result a.hover").removeClass("hover");
+                            $(this).children().addClass("hover");
+                            if (($("#local-search-result").height() + $(".nav-right form").height() - $(this).offset().top) < 20) {
+                                $("#local-search-result").scrollTop($("#local-search-result").scrollTop() + $(this).prev().height());
+                            }
+                            return false;
+                        }
+                    })
+                }
+            }
+            if (e.which == 9) {
+                return false;
             }
         }
-    };
-
-    function mouserEvent(event) {
-        const e = EventUtil.getEvent(event);
-        const left = this.offsetLeft;
-        const top = this.offsetTop;
-        const x = e.clientX ? e.clientX : e.pageX;
-        const y = e.clientY ? e.clientY : e.pageY;
-        return {
-            x: x - left,
-            y: y - top
-        };
     }
 
-    function triangleCalc(w, h, m, n, arr, fs, ac) {
-        let z = 0;
-        let posarr = [];
-        if (ac instanceof Array && ac.length > 0) {
-            posarr = ac.concat([]);
-        }
-        if (n.y < m.y) {
-            z = 1;
+    if (e.which == 27) { /* esc */
+        var $handle = $(".nav-right form .cross");
+        if ($handle.is(":visible")) {
+            $(".nav-right form .cross").trigger("click");
         } else {
-            z = -1;
+            $(".nav-right form input").blur();
         }
-        arr.map(function (item, index, array) {
-            const l = array.length - 1;
-            const hw = l * fs;
-            const lw = index * fs + fs / 2;
-            const rw = (l - index) * fs + fs / 2;
-            let ip;
-            if (lw < n.x && n.x > fs / 2) {
-                ip = z * (lw / n.x * (n.y - m.y) * z).toFixed(2);
-            }
-            if (lw > n.x && n.x < hw + fs / 2) {
-                ip = z * (rw / (fs * l - n.x + fs / 2) * (n.y - m.y) * z).toFixed(2);
-            }
-            if (ip !== 0 && ip) {
-                posarr[index] = ip;
-            }
-            item.style = `display:inline-block;transform:translateY(${ ip }px)`;
-        });
-        return posarr;
     }
-    const ef = {
-        easeOut: function (t, b, c, d, a, p) {
-            let s;
-            if (t === 0) {
-                return b;
-            }
-            if ((t /= d) === 1) {
-                return b + c;
-            }
-            if (typeof p === "undefined") {
-                p = d * 0.3;
-            }
-            if (!a || a < Math.abs(c)) {
-                a = c;
-                s = p / 4;
-            } else {
-                s = p / (2 * Math.PI) * Math.asin(c / a);
-            }
-            return -a * Math.pow(2, -10 * t) * Math.sin((t * d - s) * (2 * Math.PI) / p) + b;
-        },
-        jump: function (t, b, c, d) {
-            c = Math.abs(c);
-            let z;
-            if (t & 1) {
-                z = 1;
-            } else {
-                z = -1;
-            }
-            return z * (c - t * (1 / d) * c);
+});
+$(".nav-right form .search").on("input", function (e) {
+    inputChange(e);
+});
+$(".nav-right form .search").on("change", function (e) {
+    inputChange(e);
+});
+var searchContent;
+/*根据搜索条件，过滤文章列表*/
+function inputChange(e) {
+    var val = $(e.currentTarget).val().trim();
+    if (val == searchContent) {
+        return;
+    }
+    searchContent = val;
+    $(".nav-right form .cross").css("display", val == "" ? "none" : "block");
+    if ($('#local-search-result').length>0) {
+        if (val.length>3 && (val.substr(0,3).toLowerCase() == 'in:' || val.substr(0,3).toLowerCase()=='in：')) {
+            $('#title-list-nav').hide();
+            $('#local-search-result').show();
+            searchAll(val.substr(3))
+        } else {
+            $('#title-list-nav').show();
+            $('#local-search-result').hide();
         }
-    };
-
-    function rolBack(arr) {
-        arr.forEach(function (item) {
-            item.style = "";
-        });
     }
 
-    function back(ac, arr, mythis, fs, effact, du) {
-        if (ac.length === 0) {
-            return;
+    if (val == "") {
+        $(".nav-right nav a").css("display", "block");
+    } else if (val.substr(0, 1) == "#") {
+        $("div.ac > ul").attr("class", "tag");
+        $("div.acParent").css("display", "block");
+        if (val.substr(1).length != 0) {
+            $(".nav-right nav a").css("display", "none");
+            $(".nav-right nav").find("a:contains_tag('" + val.substr(1) + "')").css("display", "block");
         }
-        cancelAnimationFrame(mythis.Ani);
-        let t = 0;
-
-        function def() {
-            if (t === du) {
-                cancelAnimationFrame(mythis.Ani);
-                rolBack(arr);
-                return false;
-            }
-            arr.forEach(function (item, index) {
-                const np = ef[effact](t, 0, ac[index], du);
-                item.style = `display:inline-block;transform:translateY(${ np }px)`;
-            });
-            t++;
-            mythis.Ani = requestAnimationFrame(def);
+    } else if (val.substr(0, 1) == "@") {
+        $("div.ac > ul").attr("class", "author");
+        $("div.acParent").css("display", "block");
+        if (val.substr(1).length != 0) {
+            $(".nav-right nav a").css("display", "none");
+            $(".nav-right nav").find("a:contains_author('" + val.substr(1) + "')").css("display", "block");
         }
-        def();
+    } else {
+        $("div.acParent").css("display", "none");
+        $(".nav-right nav a").css("display", "none");
+        $(".nav-right nav").find("a:contains('" + val + "')").css("display", "block");
     }
-
-    function mFn(obj) {
-        const mythis = this,
-            id = obj.id,
-            colr = obj.color || "#000",
-            ct = obj.content,
-            du = obj.duration || 50,
-            effact = obj.effact;
-        let fs = obj.fontSize || 14;
-        const tf = document.getElementById(id);
-        if (typeof fs !== "string") {
-            fs = fs.toString();
-        }
-        fs = fs.match(/^\d{2}/)[0];
-        const textBox = document.createElement("div");
-        textBox.setAttribute("class", "eBox");
-
-        const frg = document.createDocumentFragment();
-        const arr = ct.split("");
-        const textarr = [];
-        arr.forEach(function (item) {
-            const dom = document.createElement("span");
-            dom.innerText = item;
-            textarr.push(dom);
-            frg.appendChild(dom);
-        });
-        textBox.appendChild(frg);
-        tf.innerHTML = "";
-        textBox.style = `width:${ fs * arr.length }px;font-size:${ fs }px;color:${ colr };position:relative`;
-        tf.appendChild(textBox);
-
-        let m, n, ac, w, h;
-        Array.prototype.forEach.call(textBox.children, function (item) {
-            item.onselectstart = function () {
-                return false;
-            };
-        });
-        let mark = false,
-            gb = false;
-
-        function enter(event) {
-            cancelAnimationFrame(mythis.Ani);
-            w = this.offsetWidth;
-            h = this.offsetHeight;
-            m = mouserEvent.call(this, event);
-            mark = true;
-        }
-
-        function move(event) {
-            n = mouserEvent.call(textBox, event);
-            if (!mark) {
-                return;
-            }
-            if (Math.abs(m.y - n.y) > h) {
-                EventUtil.removeHandler(textBox, "mousemove", move);
-                back(ac, textarr, mythis, fs, effact, du);
-                gb = true;
-                return false;
-            }
-            ac = triangleCalc(w, h, m, n, textarr, fs, ac);
-        }
-
-        function leave() {
-            EventUtil.removeHandler(textBox, "mouseleave", leave);
-            EventUtil.removeHandler(textBox, "mouseenter", enter);
-            setTimeout(function () {
-                EventUtil.addHandler(textBox, "mouseenter", enter);
-                EventUtil.addHandler(textBox, "mouseleave", leave);
-                EventUtil.addHandler(textBox, "mousemove", move);
-            }, 100);
-            if (Math.abs(m.y - n.y) < 0.5 * h && m.y !== n.y) {
-                rolBack(textarr);
-                return false;
-            }
-            if (!gb) {
-                back(ac, textarr, mythis, fs, effact, du);
-                EventUtil.removeHandler(textBox, "mousemove", move);
-                return false;
-            }
-            gb = false;
-            mark = false;
-        }
-        EventUtil.addHandler(textBox, "mouseenter", enter);
-        EventUtil.addHandler(textBox, "mouseleave", leave);
-        EventUtil.addHandler(textBox, "mousemove", move);
-
-    }
-    Array.prototype.forEach.call(args, function (item) {
-        new mFn(item);
-    });
 }
 
-/* hover特效 */
-(function () {
-    function b(t, u, s) {
-        this.t = t;
-        this.u = u;
-        this.c = s.color;
-        this.m1();
+/*是否展示标签列表*/
+$("#tagswitch").on("change", function (e) {
+    $(".nav-right .tags-list").css("display", $(this).prop("checked") ? "block" : "none");
+    // 51 为 .tags-list 的 margin-top + margin-bottom + form 的 border-bottom  || 1 为 form 的 border-bottom
+    var top = $(this).prop("checked") ? $(".nav-right form").height() + $(".nav-right .tags-list").height() + 51 : $(".nav-right form").height() + 1;
+    if ($(window).width() > 426) {
+        var height = $(document).height() - top - 11;// 11 为nav的border-top + padding-bottom
+    }  else {
+        height = $(document).height() - top - $('.nav-left').height() - 11;// 11 为nav的border-top + padding-bottom
     }
-    b.prototype = {
-        m1: function () {
-            const t = this;
-            t.d = false;
-            if (t.t.css("position") !== "fixed" && t.t.css("position") !== "absolute") {
-                t.t.css("position", "relative");
+    $(".nav-right nav, #local-search-result").css({"top": top, "height": height});
+});
+
+/*隐藏/显示 文章列表*/
+$(".full-toc .full,.semicircle").click(function (e) {
+    if ($(window).width() <= 1024 && $(".nav").hasClass("mobile")) {
+        $(".nav").removeClass("mobile");
+        $(".full-toc .full").children().removeClass("mobile");
+        return;
+    }
+    if ($(".full-toc .full").children().hasClass("min")) {
+        $(".full-toc .full").children().removeClass("min").addClass("max");
+        $(".nav, .hide-list").addClass("fullscreen");
+        content.delay(200).queue(function () {
+            $(".full-toc .full").addClass('fullscreen').dequeue();
+        });
+    } else {
+        $(".full-toc .full").children().removeClass("max").addClass("min");
+        $(".nav, .hide-list").removeClass("fullscreen");
+        content.delay(300).queue(function () {
+            $(".full-toc .full").removeClass('fullscreen').dequeue();
+        });
+    }
+});
+
+$(".post").hover(function () {
+    $(".semicircle").css("margin-left", "-43px");
+},function () {
+    $(".semicircle").css("margin-left", "0");
+})
+
+$(function () {
+    bind();
+
+    $('.more-menus').on('click', function () {
+        $('.mobile-menus-out').addClass('show');
+        $('.mobile-menus').addClass('show');
+    })
+    $('.mobile-menus-out,.mobile-menus a').on('click', function () {
+        $('.mobile-menus-out').removeClass('show');
+        $('.mobile-menus').removeClass('show');
+    })
+
+    $('.nav-left ul').css('height', 'calc(100vh - '+($('.avatar_target img').outerHeight(true) + $('.author').outerHeight(true)+$('.nav-left .icon').outerHeight(true)+$('.left-bottom').outerHeight(true))+'px)');
+    if ($('#local-search-result').length>0) {
+        // 全文搜索
+        $.getScript('/js/search.js', function () {
+            searchFunc("/search.xml", 'local-search-input', 'local-search-result');
+        })
+    }
+    //搜索框下的tag搜索事件
+    $(".nav-right .tags-list li a").on("click", function (e) {
+        $(".nav-right form input").val("#" + $(this).text().trim()).change();
+    });
+    //文章toc的显示隐藏事件
+    $(".full-toc .post-toc-menu").on('click', function () {
+        $('.post-toc').toggleClass('open');
+    });
+    /*清除搜索框*/
+    $(".nav-right form .cross").on("click", function (e) {
+        $(".nav-right form .search").val("").change();
+        $(".nav-right form .search").focus();
+    });
+    /*回到页首*/
+    $("#rocket").on("click", function (e) {
+        $(this).addClass("launch");
+        container.animate({scrollTop: 0}, 500);
+    });
+    container.scroll(function (e) {
+        if (container.scrollTop() >= 200 && $("#rocket").css("display") == "none") {
+            $("#rocket").removeClass("launch").css("display", "block").css("opacity", "0.5");
+        } else if (container.scrollTop() < 200 && $("#rocket").css("display") == "block") {
+            $("#rocket").removeClass("launch").css("opacity", "1").css("display", "none");
+        }
+    });
+    if ($("#comments").hasClass("disqus")) {
+        setTimeout(function () {
+            if ($(".count-comment").text().trim() == "") {
+                $(".count-comment").text(0);
             }
-            t.w = t.t.width();
-            t.h = t.t.height();
-            t.t.children().each(function () {
-                if ($(this).css("position") !== "fixed" && $(this).css("position") !== "absolute") {
-                    $(this).css({
-                        "position": "relative",
-                        "z-index": "2"
-                    });
-                } else if (parseInt($(this).css("z-index")) < 2) {
-                    $(this).css({
-                        "z-index": "2"
-                    });
-                }
-            });
-            if (t.t.css("background-color") !== "rgba(0, 0, 0, 0)") {
-                t.bc = t.t.css("background-color");
-            } else {
-                t.bc = "#ffffff";
-            }
-            t.t.append(`<canvas width="${ t.w }" height="${ t.h }" style="position:absolute; top:0; left:0; z-index:1;"></canvas>`);
-            t.ctx = t.t.children("canvas")[0].getContext("2d");
-            if (t.c === false) {
-                t.t.mouseenter(function () {
-                    t.c = `hsl(${ Math.random() * 360 },60%,80%)`;
-                    t.ctx.fillStyle = t.c;
-                });
-            } else {
-                t.ctx.fillStyle = t.c;
-            }
-            t.t.mousemove(function (e) {
-                t.x = e.pageX - t.t.offset().left - parseInt(t.t.css("border-left-width"));
-                t.y = e.pageY - t.t.offset().top - parseInt(t.t.css("border-top-width"));
-            });
-            t.a = [];
-            t.t.mouseenter(function (e) {
-                t.f = true;
-                t.x = e.pageX - t.t.offset().left - parseInt(t.t.css("border-left-width"));
-                t.y = e.pageY - t.t.offset().top - parseInt(t.t.css("border-top-width"));
-                t.n1();
-            });
-            t.t.mouseleave(function () {
-                t.f = false;
-            });
-            t.ctx.clearRect(0, 0, t.w, t.h);
-        },
-        n1: function () {
-            const t = this;
-            if (t.u <= 0) {
-                console.warn("hover.js错误");
-                return false;
-            }
-            if (t.u === 1) {
-                if (t.a.length === 0) {
-                    t.x1(t);
-                }
-            } else if (t.u === 2) {
-                if (t.a.length === 0) {
-                    for (let i = 0; i < t.w / 2; i++) {
-                        t.a[i] = {
-                            y: t.h
-                        };
-                    }
-                }
-                if (!t.d) {
-                    t.d = true;
-                    t.x2(t);
-                }
-            } else if (t.u === 3) {
-                if (t.a.length === 0) {
-                    t.x3(t);
-                }
-            } else if (t.u === 4) {
-                if (t.a.length === 0) {
-                    t.x4(t);
-                }
-            }
-        },
-        x1: function (t) {
-            if (t.f) {
-                t.a.push({
-                    x: t.x,
-                    y: t.y,
-                    r: 2,
-                    o: 1,
-                    c: t.c
-                });
-            }
-            t.ctx.clearRect(0, 0, t.w, t.h);
-            for (let i = 0; i < t.a.length; i++) {
-                t.ctx.beginPath();
-                t.ctx.arc(t.a[i].x, t.a[i].y, t.a[i].r, 0, Math.PI * 2);
-                t.ctx.closePath();
-                t.ctx.globalAlpha = t.a[i].o;
-                t.ctx.fillStyle = t.a[i].c;
-                t.ctx.fill();
-                t.a[i].o -= 0.02;
-                t.a[i].r += 1;
-                if (t.a[i].o <= 0) {
-                    t.a.splice(i, 1);
-                    i--;
+        }, 1500);
+    }
+    if ($(window).width() > 414) {
+        /*设置文章列表title宽度*/
+        $('.nav-right>nav>a>.post-title').css('width',$('.nav-right>nav>a').width() - $('.nav-right>nav>a>.post-date:first').width() - 40)
+    }
+    // 初始化tag列表宽度
+    $('.tags-list').css('width', $('.nav-right').width() - 40)
+
+    /*友情链接*/
+    $('.friends').on('click',function () {
+        $('.friends-area,.title-list').toggleClass('friend');
+    })
+
+    $('.back-title-list').on('click', function () {
+        $('.friends-area,.title-list').removeClass('friend');
+    })
+});
+
+/*绑定新加载内容的点击事件*/
+function bind() {
+    initArticle();
+    $(".article_number").text($("#yelog_site_posts_number").val());
+    $(".site_word_count").text($("#yelog_site_word_count").val());
+    $(".site_uv").text($("#busuanzi_value_site_uv").text());
+    $("#busuanzi_value_site_uv").bind("DOMNodeInserted", function (e) {
+        $(".site_uv").text($(this).text())
+    });
+    $(".site_pv").text($("#busuanzi_value_site_pv").text())
+    $("#busuanzi_value_site_pv").bind("DOMNodeInserted", function (e) {
+        $(".site_pv").text($(this).text())
+    });
+    $(".post .pjax .index").find("br").remove();
+    $(".post .pjax .index h1:eq(0)").addClass("article-title");
+    //绑定文章内tag的搜索事件
+    $(".post .pjax article .article-meta .tag a").on("click", function (e) {
+        $(".nav-right form input").val("#" + $(this).text().trim()).change();
+        if ($(window).width() <= 1024) {
+            $(".full-toc .full").trigger("click");
+        } else if ($(".full-toc .full span").hasClass("max")) {
+            $(".full-toc .full").trigger("click");
+        }
+    });
+    //绑定文章内分类的点击事件
+    $(".post .pjax article .article-meta .book a").on("click", function (e) {
+        $(".nav-left ul li[data-rel='" + $(this).data("rel") + "']").trigger("click");
+        if ($(window).width() <= 1024) {
+            $(".full-toc .full").trigger("click");
+        } else if ($(".full-toc .full span").hasClass("max")) {
+            $(".full-toc .full").trigger("click");
+        }
+    });
+    //绑定文章内作者的点击事件
+    $(".post .pjax article .article-meta .author").on("click", function (e) {
+        $(".nav-right form input").val("@" + $(this).text().trim()).change();
+        if ($(window).width() <= 1024) {
+            $(".full-toc .full").trigger("click");
+        } else if ($(".full-toc .full span").hasClass("max")) {
+            $(".full-toc .full").trigger("click");
+        }
+    });
+    //初始化文章toc
+    $(".post-toc-content").html($(".post .pjax article .toc-ref .toc").clone());
+    //绑定文章toc的滚动事件
+    $("a[href^='#']").click(function () {
+        container.animate({scrollTop: $($(this).attr("href")).offset().top + container.scrollTop()}, 500);
+        if ($(this).attr("href") === "#comments") {
+            load$hide();
+        }
+        return false;
+    });
+    if ($("#comments").hasClass("disqus")) {
+        var $disqusCount = $(".disqus-comment-count");
+        $disqusCount.bind("DOMNodeInserted", function (e) {
+            $(".count-comment").text(
+                $(this).text().replace(/[^0-9]/ig, "")
+            )
+        });
+    }
+    /*给文章中的站内跳转绑定pjax*/
+    $(document).pjax('.post .pjax article a[target!=_blank]', '.pjax', {fragment: '.pjax', timeout: 8000});
+
+    /*初始化 img*/
+    if (img_resize != 'photoSwipe') {
+        $(".pjax").find('img').each(function () {
+            if (!$(this).parent().hasClass('div_img')) {
+                $(this).wrap("<div class='div_img'></div>");
+                var alt = this.alt;
+                if (alt) {
+                    $(this).after('<div class="img_alt"><span>' + alt + '</span></div>');
                 }
             }
-            t.ctx.globalAlpha = 1;
-            if (t.f || t.a.length > 0) {
-                requestAnimationFrame(function () {
-                    t.x1(t);
-                });
-            } else {
-                t.ctx.clearRect(0, 0, t.w, t.h);
-            }
-        },
-        x2: function (t) {
-            t.ctx.clearRect(0, 0, t.w, t.h);
-            t.q = false;
-            t.ctx.fillStyle = t.c;
-            for (let i = 0; i < t.a.length; i++) {
-                if (t.h !== t.y) {
-                    t.a[i].h = t.h - t.y;
-                    for (let j = 0; j < Math.ceil(Math.abs(t.x - (i * 2 + 1)) / 2) - 1; j++) {
-                        t.a[i].h *= 5 / 6;
-                    }
-                    t.a[i].h = t.h - t.a[i].h;
-                } else {
-                    t.a[i].h = t.h;
-                }
-                if (t.f) {
-                    if (t.a[i].h - t.a[i].y < 0) {
-                        t.a[i].y += Math.floor((t.a[i].h - t.a[i].y) / 14);
+            if ($(window).width() > 426) {
+                $(this).on("click", function (e) {
+                    var _that = $(this);
+                    $("body").append('<img class="img_hidden" style="display:none" src="' + this.src + '" />');
+                    var img_width = "";
+                    var img_height = "";
+                    var img_top = "";
+                    var img_left = "";
+                    if ((this.width / this.height) > (document.body.clientWidth / document.body.clientHeight) && $(".img_hidden").width() > document.body.clientWidth) {
+                        img_width = document.body.clientWidth + "px";
+                        img_height = this.height * document.body.clientWidth / this.width + "px";
+                        img_top = (document.body.clientHeight - this.height * document.body.clientWidth / this.width) / 2 + "px";
+                        img_left = "0px";
+                    } else if (((this.width / this.height) < (document.body.clientWidth / document.body.clientHeight) && $(".img_hidden").height() > document.body.clientHeight)) {
+                        img_width = this.width * document.body.clientHeight / this.height + "px";
+                        img_height = document.body.clientHeight + "px";
+                        img_top = "0px";
+                        img_left = (document.body.clientWidth - this.width * document.body.clientHeight / this.height) / 2 + "px";
                     } else {
-                        t.a[i].y += Math.ceil((t.a[i].h - t.a[i].y) / 14);
+                        img_height = $(".img_hidden").height() + "px";
+                        img_width = $(".img_hidden").width() + "px";
+                        img_top = (document.body.clientHeight - $(".img_hidden").height()) / 2 + "px";
+                        img_left = (document.body.clientWidth - $(".img_hidden").width()) / 2 + "px";
                     }
-                } else {
-                    t.a[i].y += Math.ceil((t.h - t.a[i].y) / 14);
-                }
-                t.ctx.fillRect(i * 2, t.a[i].y, 2, t.h * 2);
-                if (t.a[i].y < t.h) {
-                    t.q = true;
-                }
-            }
-            t.ctx.globalAlpha = 1;
-            if (t.f || t.q) {
-                requestAnimationFrame(function () {
-                    t.x2(t);
-                });
-            } else {
-                t.ctx.clearRect(0, 0, t.w, t.h);
-                t.d = false;
-            }
-        },
-        x3: function (t) {
-            if (t.f) {
-                t.tan = Math.random() * 2 + 1;
-                t.a.push({
-                    x: t.w * Math.random(),
-                    y: -t.tan,
-                    r: t.tan,
-                    c: t.c
-                });
-            }
-            t.ctx.globalAlpha = 0.3;
-            t.ctx.fillStyle = t.bc;
-            t.ctx.fillRect(0, 0, t.w, t.h);
-            for (let i = 0; i < t.a.length; i++) {
-                t.ctx.beginPath();
-                t.ctx.arc(t.a[i].x, t.a[i].y, t.a[i].r, 0, Math.PI * 2);
-                t.ctx.closePath();
-                t.ctx.fillStyle = t.a[i].c;
-                t.ctx.fill();
-                t.a[i].x += (t.x - t.w / 2) / (t.w / 2) * (t.a[i].r - 0.7);
-                if (t.a[i].x < -t.a[i].r) {
-                    t.a[i].x = t.w + t.a[i].r;
-                } else if (t.a[i].x > t.w + t.a[i].r) {
-                    t.a[i].x = -t.a[i].r;
-                }
-                t.a[i].y += t.a[i].r - 0.7;
-                if (t.a[i].y >= t.h + t.a[i].r) {
-                    t.a.splice(i, 1);
-                    i--;
-                }
-            }
-            t.ctx.globalAlpha = 1;
-            if (t.f || t.a.length > 0) {
-                requestAnimationFrame(function () {
-                    t.x3(t);
-                });
-            } else {
-                t.ctx.clearRect(0, 0, t.w, t.h);
-            }
-        },
-        x4: function (t) {
-            if (t.f) {
-                t.tan = Math.random() * 2 + 1;
-                t.a.push({
-                    x: t.w * Math.random(),
-                    y: t.tan + t.h,
-                    r: t.tan,
-                    c: t.c
-                });
-            }
-            t.ctx.globalAlpha = 0.3;
-            t.ctx.fillStyle = t.bc;
-            t.ctx.fillRect(0, 0, t.w, t.h);
-            for (let i = 0; i < t.a.length; i++) {
-                t.ctx.beginPath();
-                t.ctx.arc(t.a[i].x, t.a[i].y, t.a[i].r, 0, Math.PI * 2);
-                t.ctx.closePath();
-                t.ctx.fillStyle = t.a[i].c;
-                t.ctx.fill();
-                t.a[i].x += (Math.random() - 0.5) * 2;
-                t.a[i].y -= 1;
-                if (t.a[i].y <= -t.a[i].r) {
-                    t.a.splice(i, 1);
-                    i--;
-                }
-            }
-            t.ctx.globalAlpha = 1;
-            if (t.f || t.a.length > 0) {
-                requestAnimationFrame(function () {
-                    t.x4(t);
-                });
-            } else {
-                t.ctx.clearRect(0, 0, t.w, t.h);
-            }
-        }
-    };
-    let y = {
-        color: false
-    };
-    $.fn.hover = function (u, g) {
-        y = {
-            color: false
-        };
-        $.extend(y, g);
-        $(this).each(function () {
-            new b($(this), u, y);
-        });
-    };
-}(jQuery));
-(function () {
-    let lastTime = 0;
-    const vendors = ["webkit", "moz"];
-    for (let xx = 0; xx < vendors.length && !window.requestAnimationFrame; ++xx) {
-        window.requestAnimationFrame = window[`${vendors[xx] }RequestAnimationFrame`];
-        window.cancelAnimationFrame = window[`${vendors[xx] }CancelAnimationFrame`] ||
-            window[`${vendors[xx] }CancelRequestAnimationFrame`];
-    }
-
-    if (!window.requestAnimationFrame) {
-        window.requestAnimationFrame = function (callback) {
-            const currTime = new Date().getTime();
-            const timeToCall = Math.max(0, 16.7 - (currTime - lastTime));
-            const id = window.setTimeout(function () {
-                callback(currTime + timeToCall);
-            }, timeToCall);
-            lastTime = currTime + timeToCall;
-            return id;
-        };
-    }
-    if (!window.cancelAnimationFrame) {
-        window.cancelAnimationFrame = function (id) {
-            clearTimeout(id);
-        };
-    }
-
-}());
-
-/* 网站运行时间 */
-function setTime(a) {
-    const
-        mydate = new Date(),
-        now = Date.parse(mydate.toLocaleDateString()),
-        start = Date.parse(a),
-        day = (now - start) / 1000 / 86400,
-        myHours = mydate.getHours(),
-        myMinutes = parseInt(mydate.getMinutes()) < 10 ? `0${ mydate.getMinutes()}` : mydate.getMinutes(),
-        mySeconds = parseInt(mydate.getSeconds()) < 10 ? `0${ mydate.getSeconds()}` : mydate.getSeconds();
-    if (!isNaN(day)) {
-        RunTime.innerHTML = `网站已运行：${ day }天 ${ myHours }小时 ${ myMinutes }分 ${ mySeconds }秒 `;
-    }
-    return false;
-}
-
-/* 一言的调用 */
-let countFail = 0;
-
-function getHitokoto() {
-    $.ajax({
-        type: "GET",
-        url: "https://sslapi.hitokoto.cn/",
-        dataType: "json",
-        timeout: 2500,
-        success: function (data) {
-            if (data.hitokoto.length > 12) {
-                countFail++;
-                if (countFail > 5) {
-                    elasticText({
-                        id: "yiyanmotto",
-                        duration: 100,
-                        effact: "easeOut",
-                        content: "为了正义！"
-                    });
-                } else {
-                    getHitokoto();
-                }
-            } else {
-                /* 签名 */
-                elasticText({
-                    id: "yiyanmotto",
-                    duration: 100,
-                    effact: "easeOut",
-                    content: data.hitokoto
-                });
-            }
-        },
-        error: function () {
-            elasticText({
-                id: "yiyanmotto",
-                duration: 100,
-                effact: "easeOut",
-                content: "生活不止眼前的苟且"
-            });
-        }
-    });
-}
-
-/* 粘贴提示 */
-const G = function (a, b, c) {
-    function d(aa, bb) {
-        return [
-            "",
-            "",
-            `作者：${ bb}`,
-            `链接：${ aa}`,
-            "著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。"
-        ];
-    }
-
-    function f(bc, cc, m) {
-        return `<div>${ d(bc, cc).join("<br />") }${m }</div>`;
-    }
-
-    function g(av) {
-        if (!window.getSelection) {
-            return;
-        }
-        const m = window.getSelection().toString();
-        if (typeof av.originalEvent.clipboardData === "object") {
-            if (m.length > 42) {
-                av.originalEvent.clipboardData.setData("text/html", f(b, c));
-                av.originalEvent.clipboardData.setData("text/plain", m + d(b, c).join("\n"));
-                av.preventDefault();
-            }
-            return;
-        }
-        const n = $(f(b, c, m)).css({
-            position: "fixed",
-            left: "-9999px"
-        }).appendTo("body");
-        window.getSelection().selectAllChildren(n[0]);
-    }
-    a.on("copy", g);
-};
-
-/* 文章块的淡出 */
-function postshow() {
-    $(".article-card").each(function (i) {
-        const articleHeight = $(".article-card").eq(i).offset().top;
-        if ($(window).height() + $(window).scrollTop() >= articleHeight) {
-            $(".article-card").eq(i).addClass("animation-show");
-        }
-        $(window).scroll(function () {
-            const windowHeight = $(window).height();
-            const scrolltop = $(window).scrollTop();
-            if (scrolltop + windowHeight >= articleHeight && scrolltop) {
-                $(".article-card").eq(i).addClass("animation-show");
+                    $("body").append('<div class="img_max" style="opacity: 0"></div>');
+                    $("body").append('<img class="img_max" src="' + this.src + '" style="top:' + $(this).offset().top + 'px;left:' + $(this).offset().left + 'px; width:' + $(this).width() + 'px;height: ' + this.height + 'px;">');
+                    $(this).css("visibility", "hidden");
+                    setTimeout(function () {
+                        $("img.img_max").attr("style", "").css({
+                            "top": img_top,
+                            "left": img_left,
+                            "width": img_width,
+                            "height": img_height
+                        });
+                        $("div.img_max").css("opacity", "1");
+                    }, 10);
+                    $(".img_max").on("click", function (e) {
+                        $("img.img_max").css({
+                            "width": _that.width() + "px",
+                            "height": _that.height() + "px",
+                            "top": _that.offset().top + "px",
+                            "left": _that.offset().left + "px"
+                        })
+                        $("div.img_max").css("opacity", "0");
+                        setTimeout(function () {
+                            _that.css("visibility", "visible");
+                            $(".img_max").remove();
+                            $(".img_hidden").remove();
+                        }, 500);
+                    })
+                })
             }
         });
-    });
-}
-
-/* 3D标题 */
-const header = document.getElementById("myheader"),
-    steps = 7;
-
-function threedee(e) {
-    const x = Math.round(steps / (window.innerWidth / 2) * (window.innerWidth / 2 - e.clientX)),
-        y = Math.round(steps / (window.innerHeight / 2) * (window.innerHeight / 2 - e.clientY));
-
-    let shadow = "",
-        color = 190,
-        i, tx, ty;
-    for (i = 0; i < steps; i++) {
-        tx = Math.round(x / steps * i);
-        ty = Math.round(y / steps * i);
-        if (tx || ty) {
-            color -= 3 * i;
-            shadow += `${tx }px ${ ty }px 0 rgb(${ color }, ${ color }, ${ color }), `;
-        }
     }
-    shadow += `${x }px ${ y }px 1px rgba(0,0,0,.2), ${ x * 2 }px ${ y * 2 }px 6px rgba(0,0,0,.3)`;
-    header.style.textShadow = shadow;
-    header.style.webkitTransform = `translateZ(0) rotateX(${ y * 1.5 }deg) rotateY(${ -x * 1.5 }deg)`;
-    header.style.MozTransform = `translateZ(0) rotateX(${ y * 1.5 }deg) rotateY(${ -x * 1.5 }deg)`;
+
 }
