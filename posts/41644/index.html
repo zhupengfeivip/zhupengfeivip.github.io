@@ -6,25 +6,25 @@
   <meta name="keywords" content=" hexo ">
   <meta name="description" content="使用hexo开通博客 | 朱鹏飞的个人博客">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-<meta name="description" content="个人博客本文件随文章发布到静态文件中">
+<meta name="description" content="朱鹏飞.net 10年">
 <meta name="keywords" content="朱鹏飞 zhupengfei .net nodejs">
 <meta property="og:type" content="website">
-<meta property="og:title" content="朱鹏飞的个人博客">
-<meta property="og:url" content="https://zhupengfeivip.github.io/README.html">
+<meta property="og:title" content="关于">
+<meta property="og:url" content="https://zhupengfeivip.github.io/about/index.html">
 <meta property="og:site_name" content="朱鹏飞的个人博客">
-<meta property="og:description" content="个人博客本文件随文章发布到静态文件中">
+<meta property="og:description" content="朱鹏飞.net 10年">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-11-15T10:58:35.069Z">
+<meta property="og:updated_time" content="2018-04-13T05:09:51.654Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="朱鹏飞的个人博客">
-<meta name="twitter:description" content="个人博客本文件随文章发布到静态文件中">
+<meta name="twitter:title" content="关于">
+<meta name="twitter:description" content="朱鹏飞.net 10年">
 
 
 <link rel="icon" href="/img/favicon.ico">
 
 <link rel="stylesheet" href="/css/style.css">
 
-<link rel="stylesheet" href="/css/hl_theme/atom-light.css">
+<link rel="stylesheet" href="/css/hl_theme/darcula.css">
 
 <link href="//cdn.bootcss.com/animate.css/3.5.2/animate.min.css" rel="stylesheet">
 <link href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
@@ -140,11 +140,11 @@
     </li>
     
     <li class="article-tag-list-item">
-        <a href="javascript:" class="color5">SqlServer</a>
+        <a href="javascript:" class="color5">hexo</a>
     </li>
     
     <li class="article-tag-list-item">
-        <a href="javascript:" class="color5">hexo</a>
+        <a href="javascript:" class="color5">SqlServer</a>
     </li>
     
     <li class="article-tag-list-item">
@@ -186,19 +186,19 @@
         </a>
         
         <a  class="软件开发 "
-           href="/posts/9e94bf8/"
-           data-tag="SqlServer"
-           data-author="" >
-            <span class="post-title" title="SqlServer常用维护脚本">SqlServer常用维护脚本</span>
-            <span class="post-date" title="2018-11-15 18:44:16">2018/11/15</span>
-        </a>
-        
-        <a  class="软件开发 "
            href="/posts/41644/"
            data-tag="hexo"
            data-author="" >
             <span class="post-title" title="使用hexo开通博客">使用hexo开通博客</span>
             <span class="post-date" title="2018-04-10 13:15:08">2018/04/10</span>
+        </a>
+        
+        <a  class="软件开发 "
+           href="/posts/9e94bf8/"
+           data-tag="SqlServer"
+           data-author="" >
+            <span class="post-title" title="SqlServer常用维护脚本">SqlServer常用维护脚本</span>
+            <span class="post-date" title="2018-11-15 18:44:16">2018/11/15</span>
         </a>
         
         <a  class="软件开发 "
@@ -250,7 +250,7 @@
     </div>
     <div class="article-meta">
         
-        <span>字数:248</span>
+        <span>字数:242</span>
         
         
         <span id="busuanzi_container_page_pv">
@@ -285,14 +285,20 @@
     <div class="article-entry" itemprop="articleBody">
       
         <p>Hexo使用帮助<br><a id="more"></a><br>Welcome to <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="noopener">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="noopener">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="noopener">GitHub</a>.</p>
-<h2 id="快速开始"><a href="#快速开始" class="headerlink" title="快速开始"></a>快速开始</h2><h3 id="创建文章"><a href="#创建文章" class="headerlink" title="创建文章"></a>创建文章</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">"My New Post"</span></span><br></pre></td></tr></table></figure>
+<h2 id="快速开始"><a href="#快速开始" class="headerlink" title="快速开始"></a>快速开始</h2><h3 id="创建文章"><a href="#创建文章" class="headerlink" title="创建文章"></a>创建文章</h3><pre><code class="bash">$ hexo new &quot;My New Post&quot;
+</code></pre>
 <p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="noopener">Writing</a></p>
-<h3 id="运行调试"><a href="#运行调试" class="headerlink" title="运行调试"></a>运行调试</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
-<p>如果运行后界面没有反映，一直是白的，可能是端口被占用<br>可试着运行<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server -p 4001</span><br></pre></td></tr></table></figure></p>
+<h3 id="运行调试"><a href="#运行调试" class="headerlink" title="运行调试"></a>运行调试</h3><pre><code class="bash">$ hexo server
+</code></pre>
+<p>如果运行后界面没有反映，一直是白的，可能是端口被占用<br>可试着运行</p>
+<pre><code class="bash">$ hexo server -p 4001
+</code></pre>
 <p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="noopener">Server</a></p>
-<h3 id="生成静态文件"><a href="#生成静态文件" class="headerlink" title="生成静态文件"></a>生成静态文件</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
+<h3 id="生成静态文件"><a href="#生成静态文件" class="headerlink" title="生成静态文件"></a>生成静态文件</h3><pre><code class="bash">$ hexo generate
+</code></pre>
 <p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="noopener">Generating</a></p>
-<h3 id="发布"><a href="#发布" class="headerlink" title="发布"></a>发布</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
+<h3 id="发布"><a href="#发布" class="headerlink" title="发布"></a>发布</h3><pre><code class="bash">$ hexo deploy
+</code></pre>
 <p>More info: <a href="https://hexo.io/docs/deployment.html" target="_blank" rel="noopener">Deployment</a></p>
 <p>一些常用命令：</p>
 <p>hexo new “postName” #新建文章</p>
@@ -303,7 +309,9 @@
 <p>hexo help # 查看帮助</p>
 <p>hexo version #查看Hexo的版本</p>
 <h2 id="更换主题的方法"><a href="#更换主题的方法" class="headerlink" title="更换主题的方法"></a>更换主题的方法</h2><p>下载新的主题到themes目录<br>如要换3-hexo<br>git clone <a href="https://github.com/yelog/hexo-theme-3-hexo.git" target="_blank" rel="noopener">https://github.com/yelog/hexo-theme-3-hexo.git</a> themes/3-hexo</p>
-<p>修改hexo根目录的<code>_config.yml</code>，如下<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">theme: 3-hexo</span><br></pre></td></tr></table></figure></p>
+<p>修改hexo根目录的<code>_config.yml</code>，如下</p>
+<pre><code class="xml">theme: 3-hexo
+</code></pre>
 
       
        <hr><span style="font-style: italic;color: gray;"> 转载请注明来源，欢迎对文章中的引用来源进行考证，欢迎指出任何有错误或不够清晰的表达。可以在下面评论区评论，也可以邮件至 zhupengfeivip@163.com </span>
@@ -318,7 +326,7 @@
 
 <div class="article_copyright">
     <p><span>文章标题:</span>使用hexo开通博客</p>
-    <p><span>文章字数:</span><span class="post-count">248</span></p>
+    <p><span>文章字数:</span><span class="post-count">242</span></p>
     <p><span>本文作者:</span><a href="javascript:void(0)" title="朱鹏飞">朱鹏飞</a></p>
     <p><span>发布时间:</span>2018-04-10, 13:15:08</p>
     <p><span>最后更新:</span>2018-11-15, 18:32:17</p>
@@ -381,7 +389,7 @@
     /*作者、标签的自动补全*/
     $(function () {
         $('.search').AutoComplete({
-            'data': ['#Linux','#mf1 加密','#软件开发','#SqlServer','#hexo','#git',],
+            'data': ['#Linux','#mf1 加密','#软件开发','#hexo','#SqlServer','#git',],
             'itemHeight': 20,
             'width': 418
         }).AutoComplete('show');
@@ -404,17 +412,6 @@
         
 
         /*高亮代码块行号*/
-        
-        $('pre code').each(function(){
-            var lines = $(this).text().split('\n').length - 1;
-            var $numbering = $('<ul/>').addClass('pre-numbering').attr("unselectable","on");
-            $(this).addClass('has-numbering')
-                    .parent()
-                    .append($numbering);
-            for(i=1;i<=lines;i++){
-                $numbering.append($('<li/>').text(i));
-            }
-        });
         
 
         /*访问数量*/
@@ -687,32 +684,6 @@
 </script>
 
 <!--加入行号的高亮代码块样式-->
-
-<style>
-    pre{
-        position: relative;
-        margin-bottom: 24px;
-        border-radius: 10px;
-        border: 2px solid #e2dede;
-        background: #FFF;
-        overflow: hidden;
-    }
-    code.has-numbering{
-        margin-left: 30px;
-    }
-    .pre-numbering{
-        margin: 0px;
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 20px;
-        padding: 0.5em 3px 0.7em 5px;
-        border-right: 1px solid #C3CCD0;
-        text-align: right;
-        color: #AAA;
-        background-color: #fafafa;
-    }
-</style>
 
 <!--自定义样式设置-->
 <style>
