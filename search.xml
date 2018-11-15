@@ -3,6 +3,52 @@
   
     
     <entry>
+      <title>Linux常用命令</title>
+      <link href="//posts/d0edc1ed/"/>
+      <url>//posts/d0edc1ed/</url>
+      
+        <content type="html"><![CDATA[<p>清屏clear<br>clear                   清理屏幕显示的内容<br>列出目录 ls<br>ls                列出当前目录的内容<br>ls -l            列出当前目录的详细内容<br>ls -lh          以便于阅读的方式列出详细内容，主要是文件大小的单位变了<br>ls -a           列出目录内包含隐藏项的全部内容<br>ls -lha        -l -h -a等参数可以组合使用<br>ls -l /          列出根目录的详细信息，/代表根目录，换成其他目录，则列出指定目录的内容<br>注：命令行中.或者./代表当前目录；..或者../代表上一级目录；~或者~/代表当前用户主目录。<br>创建目录 mkdir<br>mkdir test         创建一个名为test的目录<br>删除空目录 rmdir<br>如果目录test是空的，那么你可以这样将其删除<br>rmdir test<br>删除文件 rm<br>你可以执行touch tmp.txt命令，在当前目录下创建一个空的文件。<br>rm tmp.txt                 可以删除tmp.txt<br>rm -f tmp.txt             某些配置下，系统会让你确认是否删除，加-f是强行删掉tmp.txt<br>大杀器 rm -rf<br>只要权限足够, rm -rf可以删掉你指定的一切。<br>假定你先mkdir test，然后touch test/tmp.txt，这时rmdir test是不会成功的。<br>但rm -rf test，则会将test目录和目录中的tmp.txt一并删掉。<br>注：Linux命令行是没有回收站的。MySQL从删库到跑路，应该就是执行了rm -rf *。<br>移动文件 mv<br>你可以执行touch tmp.txt命令，在当前目录下创建一个空的文件。<br>mv tmp.txt tmp2.txt                 将文件名从tmp.txt更改为tmp2.txt</p><p>mv也可以用来更改目录名，你可以执行mkdir test在当前目录创建一个名为test的目录。<br>mv test test2                               将目录名从test     改为test2</p><p>上传文件到服务器 rz<br>在命令行执行rz，剩下的根据提示操作。</p><p>如果提示没有找到命令，请安装<br>apt-get install lrzsz</p><p>下载文件到本地 sz<br>在命令行执行echo ‘Hello world!’ &gt; tmp.txt，这时你创建了一个文本文件。<br>sz tmp.txt                  将tmp.txt发送到本地<br>注：在CentOS中使用rz/sz需要安装lrzsz，即执行命令sudo yum install lrzsz，测试用的虚拟机里已经装好了。<br>解压zip包 unzip<br>假定你用rz上传了一个test.zip，那么你可以用如下命令解压<br>unzip test.zip<br>注：unzip是需要通过sudo yum install unzip安装的，测试用的虚拟机中已安装。<br>解压xz包 xz -d<br>node.js的Linux安装包名称形如node-8.1.1.tar.xz，扩展名.tar.xz，解包时需要<br>xz -d node-8.1.1.tar.xz              这时会得到node-8.1.1.tar，然后<br>tar -vxf node-8.1.1.tar              这时才得到解压后的目录node-8.1.1<br>注：Linux里实际上没有扩展名的说法，.tdar.xz这样的后缀只是为了便于理解。<br>tar.gz的打包和解包<br>如前所述, mkdir test，touch test/tmp.txt，可以创建一个目录一个文件，现在把这个目录打包。<br>tar -zvcf test.tar.gz test/                   这样就创建了test.tar.gz压缩包<br>tar -zvxf test.tar.gz                    这样可以解包<br>ping<br>ping 114.114.114.114                                           如果服务器有多个IP，可以指定源IP<br>ping 114.114.114.114 -I 192.168.70.99<br>查看负载 top<br>top            动态显示负载，输入top后按数字1，可以显示或隐藏各个cpu核心的负载<br>Ctrl + C退出top命令<br>查看磁盘空间 df -lh<br>df -lh         显示磁盘空间使用情况<br>查看目录大小 du -sh<br>du -sh test/      查看test目录占用多大空间<br>查看服务器的一个外网IP<br>curl myip.ipip.net              这是用curl命令去访问ipip.net，会返回外网IP<br>注：如果提示找不到curl命令，可以sudo yum install curl。</p><p>查看nginx安装目录<br>ps -ef | grep nginx</p><p>ssh-copy-id -i id_rsa_zpf2048.pub <a href="mailto:root@47.89.242.136" target="_blank" rel="noopener">root@47.89.242.136</a></p><p>$ pm2 list               # 显示所有进程状态</p><p>查看侦听端口<br>netstat -an|grep LISTEN</p><p>查看侦听端口<br>netstat -ntpl</p><p>检查nginx配置文件是否正确<br>/usr/sbin/nginx -c /etc/nginx/nginx.conf -t<br>nginx -c /etc/nginx/nginx.conf -t<br>检查完没有问题后，就可以reload配置了<br>nginx -s reload</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> 软件开发 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> Linux </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>SqlServer常用维护脚本</title>
+      <link href="//posts/9e94bf8/"/>
+      <url>//posts/9e94bf8/</url>
+      
+        <content type="html"><![CDATA[<h1 id="查看数据库文件空间使用率"><a href="#查看数据库文件空间使用率" class="headerlink" title="查看数据库文件空间使用率"></a>查看数据库文件空间使用率</h1><p>SELECT a.name [文件名称]<br>    ,cast(a.[size]<em>1.0/128 as decimal(12,1)) AS [文件设置大小(MB)]<br>    ,CAST( fileproperty(s.name,’SpaceUsed’)/(8</em>16.0) AS DECIMAL(12,1)) AS [文件所占空间(MB)]<br>    ,CAST( (fileproperty(s.name,’SpaceUsed’)/(8<em>16.0))/(s.size/(8</em>16.0))<em>100.0  AS DECIMAL(12,1)) AS [所占空间率%]<br>    ,CASE WHEN A.growth =0 THEN ‘文件大小固定，不会增长’ ELSE ‘文件将自动增长’ end [增长模式]<br>    ,CASE WHEN A.growth &gt; 0 AND is_percent_growth = 0 THEN ‘增量为固定大小’<br>        WHEN A.growth &gt; 0 AND is_percent_growth = 1 THEN ‘增量将用整数百分比表示’<br>        ELSE ‘文件大小固定，不会增长’ END AS [增量模式]<br>    ,CASE WHEN A.growth &gt; 0 AND is_percent_growth = 0 THEN cast(cast(a.growth</em>1.0/128as decimal(12,0)) AS VARCHAR)+’MB’<br>        WHEN A.growth &gt; 0 AND is_percent_growth = 1 THEN cast(cast(a.growth AS decimal(12,0)) AS VARCHAR)+’%’<br>        ELSE ‘文件大小固定，不会增长’ end AS [增长值(%或MB)]<br>    ,a.physical_name AS [文件所在目录]<br>    ,a.type_desc AS [文件类型]<br>FROM sys.database_files  a<br>INNER JOIN sys.sysfiles AS s ON a.[file_id]=s.fileid<br>LEFT JOIN sys.dm_db_file_space_usage b ON a.[file_id]=b.[file_id]</p><h1 id="收缩日志"><a href="#收缩日志" class="headerlink" title="收缩日志"></a>收缩日志</h1><p>DBCC SHRINKDATABASE(yorkbbs)<br>请谨慎操作，执行时间会根据数据库大小有所不同。</p><p>如果出现如下错误，那请备份一下数据库，使用事务日志备份方式备份<br>消息 0，级别 11，状态 0，第 0 行<br>当前命令发生了严重错误。应放弃任何可能产生的结果。</p><p>1.清空日志<br>　 DUMP TRANSACTION yorkbbs WITH NO_LOG </p><p>2.截断事务日志：<br>　 BACKUP LOG yorkbbs WITH NO_LOG</p><h1 id="查询日志空间使用率"><a href="#查询日志空间使用率" class="headerlink" title="查询日志空间使用率"></a>查询日志空间使用率</h1><p>DBCC SQLPERF(LOGSPACE)</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> 软件开发 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> SqlServer </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
       <title>对软件开发的一些想法</title>
       <link href="//posts/a311a15/"/>
       <url>//posts/a311a15/</url>

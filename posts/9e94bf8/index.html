@@ -2,9 +2,9 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>M1卡区块控制位详解 | 朱鹏飞的个人博客</title>
-  <meta name="keywords" content=" mf1 加密 ">
-  <meta name="description" content="M1卡区块控制位详解 | 朱鹏飞的个人博客">
+  <title>SqlServer常用维护脚本 | 朱鹏飞的个人博客</title>
+  <meta name="keywords" content=" SqlServer ">
+  <meta name="description" content="SqlServer常用维护脚本 | 朱鹏飞的个人博客">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 <meta name="description" content="朱鹏飞.net 10年">
 <meta name="keywords" content="朱鹏飞 zhupengfei .net nodejs">
@@ -221,9 +221,9 @@
 </aside>
 <div class="post">
     <div class="pjax">
-        <article id="post-M1卡区块控制位详解" class="article article-type-post" itemscope itemprop="blogPost">
+        <article id="post-SqlServer常用维护脚本" class="article article-type-post" itemscope itemprop="blogPost">
     
-        <h1 class="article-title">M1卡区块控制位详解</h1>
+        <h1 class="article-title">SqlServer常用维护脚本</h1>
     
     <div class="article-meta">
         
@@ -238,19 +238,19 @@
         
         <span class="tag">
             
-            <a href="javascript:" class="color2">mf1 加密</a>
+            <a href="javascript:" class="color5">SqlServer</a>
             
         </span>
         
     </div>
     <div class="article-meta">
         
-        创建时间:<time class="date" title='更新时间: 2018-11-15 18:32:12'>2018-04-13 08:22</time>
+        创建时间:<time class="date" title='更新时间: 2018-11-15 18:45:13'>2018-11-15 18:44</time>
         
     </div>
     <div class="article-meta">
         
-        <span>字数:2,136</span>
+        <span>字数:384</span>
         
         
         <span id="busuanzi_container_page_pv">
@@ -269,7 +269,7 @@
     
     <div class="toc-ref">
     
-        
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#查看数据库文件空间使用率"><span class="toc-text">查看数据库文件空间使用率</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#收缩日志"><span class="toc-text">收缩日志</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#查询日志空间使用率"><span class="toc-text">查询日志空间使用率</span></a></li></ol>
     
 <style>
     .left-col .switch-btn,
@@ -284,40 +284,12 @@
 </div>
     <div class="article-entry" itemprop="articleBody">
       
-        <p>M1卡区块控制位详解<br><a id="more"></a><br>每个扇区的密码和存取控制都是独立的，可以根据实际需要设定各自的密码及存取 控制。存取控制为4个字节，共32位，扇区中的每个块（包括数据块和控制块）的存取条件是由密码和存取控制共同决定的，在存取控制中每个块都有相应的三个控制位,定义如下：<br>块0：   C10   C20   C30<br>块1：   C11   C21   C31<br>块2：   C12   C22   C32<br>块3：   C13   C23   C33<br>三个控制位以正和反两种形式存在于存取控制字节中，决定了该块的访问权限（如     进行减值操作必须验证KEY A，进行加值操作必须验证KEY B，等等）。三个控制   位在存取控制字节中的位置，以块0为例：<br><img src="/img/5c9a502c/1.png"></p>
-<font color="red">注意高字节和低字节顺序不同。</font>
-
-
-<p>(一)，以常用设置”08 77 8F 69”控制条件为例，先搞清楚它――具有的访问权限。</p>
-<p>1、对”08 77 8F 69”值进行计算，该值定位于各区块3的6，7，8，9四个字节内，字节6=08，字节7=77， 字节8=8F，   字节9=69(默认值，不予计算)。</p>
-<p>2、例如：字节6=08，对应其二进制值=00001000， 则对6，7，8这三个字节进行二进制转换结果见下表：<br>字节6 = 0 0 0 0 1 0 0 0 字节7 = 0 1 1 1 0 1 1 1 字节8 = 1 0 0 0 1 1 1 1<br>3、参照表2及表4算法,字节6的全部二进制值取反,字节7的低四位二进制值取反,字节8不变,<br><img src="/img/5c9a502c/2.png"></p>
-<p>得到：<br>字节号 对应二进制值 位置 高4位 位置 低4位<br>字节6字节7字节8 0 0 0 0 1 0 0 00 1 1 1 0 1 1 11 0 0 0 1 1 1 1 C2YC1YC3Y 1 1 1 10 1 1 11 0 0 0 C1YC3YC2Y 0 1 1 11 0 0 01 1 1 1<br>所属块位   块3块2块1块0  块3块2块1块0<br>4、对以上6，7，8字节的存取/控制二进制已取反值，依照表2，表4块位转换为各块控制值，如下表：<br>块3位 字节7，字节6，字节8 = C13，C23，C33 = C1Y，C2Y，C3Y = 0 1 1<br>块2位块1位块0位 字节7，字节6，字节8 = C12，C22，C32 = C1Y，C2Y，C3Y = 1 1 0字节7，字节6，字节8 = C11，C21，C31 = C1Y，C2Y，C3Y = 1 1 0字节7，字节6，字节8 = C10，C20，C30 = C1Y，C2Y，C3Y = 1 1 0<br>注意：<br>1、高4位的各块值=低4位的各块值时，其值可用。高4位值≠低4位值时，其值不可用!<br>2、高位和低位的顺序是不一样的。高位从上向下是C2,C1,C3。低位是C1,C3,C2</p>
-<p><img src="/img/5c9a502c/3.png"></p>
-<p> 7 6 5 4 3 2 1 0<br>6 c23_b c22_b c21_b c20_b c13_b c12_b c11_b c10_b<br>7 c13 c12 c11 c10 c33_b c32_b c31_b c30_b<br>8 c33 c32 c31 c30 c23 c22 c21 c20<br>9        </p>
-<p>5、查对访问权限(数据存取控制依照表3，块3存取控制依照表5)，该例”08 77 8F 69”的访问权限为：</p>
-<p>◆ 块3 = 011：权限为：KeyA，KeyB均不可读，验证KeyB正确后可改写KeyA和KeyB，验证KeyA或KeyB正确后可读”控制位”。在此可见密钥KeyB的重要性，KeyB不正确是无法看到块3控制值，更无法修改密钥。</p>
-<p>◆ 块2 = 块1 = 块0 = 110：权限为：验证KeyA或KeyB后可读该块数据，减值以及初始化值，只有验证KeyB 正确后才可改写该块数据，在此可以看到密钥KeyB对改写数据块也起着关键性作用。</p>
-<p>(二)、”08 77 8F 69” 控制条件设置步骤：</p>
-<p>由(一)可知：KeyB设置后为不可读，并且改写数据和改写控制位都需要正确验证它，故KeyB设置后程序</p>
-<p>操作员必须妥善保管KeyB值，否则以后改写数据和控制位时，不正确的KeyB值将无法实现卡的任何操作!!!</p>
-<p>1、修改块3控制位的值：最初的各区块3内的KeyA，KeyB都是厂商12个”F”默认值(KeyA在任何条件下均为不可读，大部分读写机程序表现KeyA为未知的12个”0” )，在修改控制值时，先不要修改默认密码KeyA和KeyB，在控制位修改成功后，再去更改新密码值。即先对块3的控制位进行修改(默认值FF 07 80 69改为新值08 77 8F 69)并执行写操作。控制位写成功后，KeyB亦为12个”0”不可读了，但仍是隐藏的12个”f”默认值。</p>
-<p>2、修改块3的KeyA和KeyB值：控制位08 77 8F 69值写成功后，验证KeyB正确后方可改写KeyA和KeyB新密码。在密码操作模式键入要改写区块之先前密码B(先前密码为默认值时，则不需改动和加载)，加载后反回数据操作模式，再进行读值，KeyA和KeyB值的改写。</p>
-<p>3、修改块0～块2中数据：由新的控制条件08778F69可知，要修改数据，必须先验证KeyB，故先设置密码操作为KeyB认证方式，加载后再返回数据操作模式，对要修改的数据块进行值的改写操作。</p>
-<p>4、上例中分析了”08 77 8F 69”的访问条件及其改写步骤，对用户的其它控制条件亦可参照应用。<br>智能卡</p>
-<p>块012权限说明：<br><img src="/img/5c9a502c/4.png"><br><img src="/img/5c9a502c/5.png"></p>
-<p>块3权限说明：<br><img src="/img/5c9a502c/6.png"><br>复旦微电子文档中说明如下：<br><img src="/img/5c9a502c/7.png"></p>
-<p>比较常见的控制位<br>FF 07 80 69<br>默认值<br>字节6 FF= 1 1 1 1 1 1 1 1 字节7 07= 0 0 0 0 0 1 1 1 字节8 80= 1 0 0 0 0 0 0 0</p>
-<p>字节号 对应二进制值 位置 高4位 位置 低4位<br>字节6字节7字节8 1 1 1 1 1 1 1 10 0 0 0 0 1 1 11 0 0 0 0 0 0 0 C2YC1YC3Y 0 0 0 00 0 0 01 0 0 0 C1YC3YC2Y 0 0 0 01 0 0 00 0 0 0<br>所属块位   块3块2块1块0  块3块2块1块0</p>
-<p>块3位 字节7，字节6，字节8 = C13，C23，C33 = C1Y，C2Y，C3Y = 0 0 1<br>块2位块1位块0位 字节7，字节6，字节8 = C12，C22，C32 = C1Y，C2Y，C3Y = 0 0 0字节7，字节6，字节8 = C11，C21，C31 = C1Y，C2Y，C3Y = 0 0 0字节7，字节6，字节8 = C10，C20，C30 = C1Y，C2Y，C3Y = 0 0 0<br>权限解释：数据块012的权限为000，表示keyA和keyB都可读可写。权限最高。<br><img src="/img/5c9a502c/8.png"></p>
-<p>块3为001，密码A为任何时候不可读出，可以通过AB写。<br>密码B可以通过AB读写。<br>控制字节可以通过AB读写。<br><img src="/img/5c9a502c/9.png"></p>
-<hr>
-<p>08 77 8F 69【适合实际使用，权限控制相对较好】<br>字节6 = 0 0 0 0 1 0 0 0 字节7 = 0 1 1 1 0 1 1 1 字节8 = 1 0 0 0 1 1 1 1</p>
-<p>字节号 对应二进制值 位置 高4位 位置 低4位<br>字节6字节7字节8 0 0 0 0 1 0 0 00 1 1 1 0 1 1 11 0 0 0 1 1 1 1 C2YC1YC3Y 1 1 1 10 1 1 11 0 0 0 C1YC3YC2Y 0 1 1 11 0 0 01 1 1 1<br>所属块位   块3块2块1块0  块3块2块1块0</p>
-<p>块3位 字节7，字节6，字节8 = C13，C23，C33 = C1Y，C2Y，C3Y = 0 1 1<br>块2位块1位块0位 字节7，字节6，字节8 = C12，C22，C32 = C1Y，C2Y，C3Y = 1 1 0字节7，字节6，字节8 = C11，C21，C31 = C1Y，C2Y，C3Y = 1 1 0字节7，字节6，字节8 = C10，C20，C30 = C1Y，C2Y，C3Y = 1 1 0<br>权限解释：数据块012的权限为110，密码AB都可读，只有密码B可写。密码B可增减。比如，可在实际业务中密码A用于消费，密码B用于充值。<br><img src="/img/5c9a502c/10.png"><br>块3<br>011，密码A和密码B任何时间不允许读，只能用密码B写。控制字节AB都可读，只有B可写。<br><img src="/img/5c9a502c/11.png"></p>
-<p>07 8F 0F 69【冰冻，永远只可读不可写】</p>
-<p>00 F0 FF 69【自杀，永远不可读不可写】自杀模式还有很多，把控制字写的不认识也无法使用，在实际中新手经常干的事，所以一定要控制好。<br><img src="/img/5c9a502c/12.png"></p>
-<p>对数据块的操作<br>读 (Read)：读一个块；<br>写 (Write）：写一个块；<br>加（Increment）：对数值块进行加值；<br>减（Decrement）：对数值块进行减值；<br>存储（Restore）：将块中的内容存到数据寄存器中；<br>传输（Transfer）：将数据寄存器中的内容写入块中；<br>中止（Halt）：将卡置于暂停工作状态；</p>
-<p>好了，介绍就到这里，大家有疑问，欢迎联系我。</p>
+        <h1 id="查看数据库文件空间使用率"><a href="#查看数据库文件空间使用率" class="headerlink" title="查看数据库文件空间使用率"></a>查看数据库文件空间使用率</h1><p>SELECT a.name [文件名称]<br>    ,cast(a.[size]<em>1.0/128 as decimal(12,1)) AS [文件设置大小(MB)]<br>    ,CAST( fileproperty(s.name,’SpaceUsed’)/(8</em>16.0) AS DECIMAL(12,1)) AS [文件所占空间(MB)]<br>    ,CAST( (fileproperty(s.name,’SpaceUsed’)/(8<em>16.0))/(s.size/(8</em>16.0))<em>100.0  AS DECIMAL(12,1)) AS [所占空间率%]<br>    ,CASE WHEN A.growth =0 THEN ‘文件大小固定，不会增长’ ELSE ‘文件将自动增长’ end [增长模式]<br>    ,CASE WHEN A.growth &gt; 0 AND is_percent_growth = 0 THEN ‘增量为固定大小’<br>        WHEN A.growth &gt; 0 AND is_percent_growth = 1 THEN ‘增量将用整数百分比表示’<br>        ELSE ‘文件大小固定，不会增长’ END AS [增量模式]<br>    ,CASE WHEN A.growth &gt; 0 AND is_percent_growth = 0 THEN cast(cast(a.growth</em>1.0/128as decimal(12,0)) AS VARCHAR)+’MB’<br>        WHEN A.growth &gt; 0 AND is_percent_growth = 1 THEN cast(cast(a.growth AS decimal(12,0)) AS VARCHAR)+’%’<br>        ELSE ‘文件大小固定，不会增长’ end AS [增长值(%或MB)]<br>    ,a.physical_name AS [文件所在目录]<br>    ,a.type_desc AS [文件类型]<br>FROM sys.database_files  a<br>INNER JOIN sys.sysfiles AS s ON a.[file_id]=s.fileid<br>LEFT JOIN sys.dm_db_file_space_usage b ON a.[file_id]=b.[file_id]</p>
+<h1 id="收缩日志"><a href="#收缩日志" class="headerlink" title="收缩日志"></a>收缩日志</h1><p>DBCC SHRINKDATABASE(yorkbbs)<br>请谨慎操作，执行时间会根据数据库大小有所不同。</p>
+<p>如果出现如下错误，那请备份一下数据库，使用事务日志备份方式备份<br>消息 0，级别 11，状态 0，第 0 行<br>当前命令发生了严重错误。应放弃任何可能产生的结果。</p>
+<p>1.清空日志<br>　 DUMP TRANSACTION yorkbbs WITH NO_LOG </p>
+<p>2.截断事务日志：<br>　 BACKUP LOG yorkbbs WITH NO_LOG</p>
+<h1 id="查询日志空间使用率"><a href="#查询日志空间使用率" class="headerlink" title="查询日志空间使用率"></a>查询日志空间使用率</h1><p>DBCC SQLPERF(LOGSPACE)</p>
 
       
        <hr><span style="font-style: italic;color: gray;"> 转载请注明来源，欢迎对文章中的引用来源进行考证，欢迎指出任何有错误或不够清晰的表达。可以在下面评论区评论，也可以邮件至 zhupengfeivip@163.com </span>
@@ -331,12 +303,12 @@
 
 
 <div class="article_copyright">
-    <p><span>文章标题:</span>M1卡区块控制位详解</p>
-    <p><span>文章字数:</span><span class="post-count">2,136</span></p>
+    <p><span>文章标题:</span>SqlServer常用维护脚本</p>
+    <p><span>文章字数:</span><span class="post-count">384</span></p>
     <p><span>本文作者:</span><a href="javascript:void(0)" title="朱鹏飞">朱鹏飞</a></p>
-    <p><span>发布时间:</span>2018-04-13, 08:22:45</p>
-    <p><span>最后更新:</span>2018-11-15, 18:32:12</p>
-    <span>原始链接:</span><a class="post-url" href="/posts/5c9a502c/" title="M1卡区块控制位详解">https://zhupengfeivip.github.io/posts/5c9a502c/</a>
+    <p><span>发布时间:</span>2018-11-15, 18:44:16</p>
+    <p><span>最后更新:</span>2018-11-15, 18:45:13</p>
+    <span>原始链接:</span><a class="post-url" href="/posts/9e94bf8/" title="SqlServer常用维护脚本">https://zhupengfeivip.github.io/posts/9e94bf8/</a>
     <p>
         <span>版权声明:</span><i class="fa fa-creative-commons"></i> <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/" title="CC BY-NC-SA 4.0 International" target = "_blank">"署名-非商用-相同方式共享 4.0"</a> 转载请保留原文链接及作者。
     </p>
