@@ -2,9 +2,9 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>Linux常用命令 | 朱鹏飞的个人博客</title>
-  <meta name="keywords" content=" Linux ">
-  <meta name="description" content="Linux常用命令 | 朱鹏飞的个人博客">
+  <title>markdown语法介绍 | 朱鹏飞的个人博客</title>
+  <meta name="keywords" content=" markdown ">
+  <meta name="description" content="markdown语法介绍 | 朱鹏飞的个人博客">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 <meta name="description" content="朱鹏飞.net 10年">
 <meta name="keywords" content="朱鹏飞 zhupengfei .net nodejs">
@@ -239,9 +239,9 @@
 </aside>
 <div class="post">
     <div class="pjax">
-        <article id="post-Linux常用命令" class="article article-type-post" itemscope itemprop="blogPost">
+        <article id="post-markdown语法介绍" class="article article-type-post" itemscope itemprop="blogPost">
     
-        <h1 class="article-title">Linux常用命令</h1>
+        <h1 class="article-title">markdown语法介绍</h1>
     
     <div class="article-meta">
         
@@ -256,19 +256,19 @@
         
         <span class="tag">
             
-            <a href="javascript:" class="color1">Linux</a>
+            <a href="javascript:" class="color4">markdown</a>
             
         </span>
         
     </div>
     <div class="article-meta">
         
-        创建时间:<time class="date" title='更新时间: 2018-11-15 18:52:43'>2018-11-15 18:47</time>
+        创建时间:<time class="date" title='更新时间: 2018-11-27 08:45:38'>2018-11-27 08:44</time>
         
     </div>
     <div class="article-meta">
         
-        <span>字数:1,056</span>
+        <span>字数:1,326</span>
         
         
         <span id="busuanzi_container_page_pv">
@@ -287,7 +287,7 @@
     
     <div class="toc-ref">
     
-        
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#标题"><span class="toc-text">标题</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#这是标题h1"><span class="toc-text">这是标题h1  </span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#这是标题h2"><span class="toc-text">这是标题h2  </span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#这是标题h3"><span class="toc-text">这是标题h3</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#这是标题h4"><span class="toc-text">这是标题h4</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#这是标题h5"><span class="toc-text">这是标题h5</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#这是标题h6"><span class="toc-text">这是标题h6</span></a></li></ol></li></ol></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#段落，换行，加粗，斜体"><span class="toc-text">段落，换行，加粗，斜体</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#引用，代码块，分割线"><span class="toc-text">引用，代码块，分割线</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#列表"><span class="toc-text">列表</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#区段元素"><span class="toc-text">区段元素</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#链接"><span class="toc-text">链接</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#图片"><span class="toc-text">图片</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#表格"><span class="toc-text">表格</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#转义"><span class="toc-text">转义</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#代码"><span class="toc-text">代码</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#LaTeX-公式"><span class="toc-text">LaTeX 公式</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#7-流程图"><span class="toc-text">7. 流程图</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#示例"><span class="toc-text">示例</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#8-序列图"><span class="toc-text">8. 序列图</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#示例-1"><span class="toc-text">示例 1</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#示例-2"><span class="toc-text">示例 2</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#格式化文本"><span class="toc-text">格式化文本</span></a></li></ol></li></ol>
     
 <style>
     .left-col .switch-btn,
@@ -302,17 +302,151 @@
 </div>
     <div class="article-entry" itemprop="articleBody">
       
-        <p>清屏clear<br>clear                   清理屏幕显示的内容<br>列出目录 ls<br>ls                列出当前目录的内容<br>ls -l            列出当前目录的详细内容<br>ls -lh          以便于阅读的方式列出详细内容，主要是文件大小的单位变了<br>ls -a           列出目录内包含隐藏项的全部内容<br>ls -lha        -l -h -a等参数可以组合使用<br>ls -l /          列出根目录的详细信息，/代表根目录，换成其他目录，则列出指定目录的内容<br>注：命令行中.或者./代表当前目录；..或者../代表上一级目录；~或者~/代表当前用户主目录。<br>创建目录 mkdir<br>mkdir test         创建一个名为test的目录<br>删除空目录 rmdir<br>如果目录test是空的，那么你可以这样将其删除<br>rmdir test<br>删除文件 rm<br>你可以执行touch tmp.txt命令，在当前目录下创建一个空的文件。<br>rm tmp.txt                 可以删除tmp.txt<br>rm -f tmp.txt             某些配置下，系统会让你确认是否删除，加-f是强行删掉tmp.txt<br>大杀器 rm -rf<br>只要权限足够, rm -rf可以删掉你指定的一切。<br>假定你先mkdir test，然后touch test/tmp.txt，这时rmdir test是不会成功的。<br>但rm -rf test，则会将test目录和目录中的tmp.txt一并删掉。<br>注：Linux命令行是没有回收站的。MySQL从删库到跑路，应该就是执行了rm -rf *。<br>移动文件 mv<br>你可以执行touch tmp.txt命令，在当前目录下创建一个空的文件。<br>mv tmp.txt tmp2.txt                 将文件名从tmp.txt更改为tmp2.txt</p>
-<p>mv也可以用来更改目录名，你可以执行mkdir test在当前目录创建一个名为test的目录。<br>mv test test2                               将目录名从test     改为test2</p>
-<p>上传文件到服务器 rz<br>在命令行执行rz，剩下的根据提示操作。</p>
-<p>如果提示没有找到命令，请安装<br>apt-get install lrzsz</p>
-<p>下载文件到本地 sz<br>在命令行执行echo ‘Hello world!’ &gt; tmp.txt，这时你创建了一个文本文件。<br>sz tmp.txt                  将tmp.txt发送到本地<br>注：在CentOS中使用rz/sz需要安装lrzsz，即执行命令sudo yum install lrzsz，测试用的虚拟机里已经装好了。<br>解压zip包 unzip<br>假定你用rz上传了一个test.zip，那么你可以用如下命令解压<br>unzip test.zip<br>注：unzip是需要通过sudo yum install unzip安装的，测试用的虚拟机中已安装。<br>解压xz包 xz -d<br>node.js的Linux安装包名称形如node-8.1.1.tar.xz，扩展名.tar.xz，解包时需要<br>xz -d node-8.1.1.tar.xz              这时会得到node-8.1.1.tar，然后<br>tar -vxf node-8.1.1.tar              这时才得到解压后的目录node-8.1.1<br>注：Linux里实际上没有扩展名的说法，.tdar.xz这样的后缀只是为了便于理解。<br>tar.gz的打包和解包<br>如前所述, mkdir test，touch test/tmp.txt，可以创建一个目录一个文件，现在把这个目录打包。<br>tar -zvcf test.tar.gz test/                   这样就创建了test.tar.gz压缩包<br>tar -zvxf test.tar.gz                    这样可以解包<br>ping<br>ping 114.114.114.114                                           如果服务器有多个IP，可以指定源IP<br>ping 114.114.114.114 -I 192.168.70.99<br>查看负载 top<br>top            动态显示负载，输入top后按数字1，可以显示或隐藏各个cpu核心的负载<br>Ctrl + C退出top命令<br>查看磁盘空间 df -lh<br>df -lh         显示磁盘空间使用情况<br>查看目录大小 du -sh<br>du -sh test/      查看test目录占用多大空间<br>查看服务器的一个外网IP<br>curl myip.ipip.net              这是用curl命令去访问ipip.net，会返回外网IP<br>注：如果提示找不到curl命令，可以sudo yum install curl。</p>
-<p>查看nginx安装目录<br>ps -ef | grep nginx</p>
-<p>ssh-copy-id -i id_rsa_zpf2048.pub <a href="mailto:root@47.89.242.136" target="_blank" rel="noopener">root@47.89.242.136</a></p>
-<p>$ pm2 list               # 显示所有进程状态</p>
-<p>查看侦听端口<br>netstat -an|grep LISTEN</p>
-<p>查看侦听端口<br>netstat -ntpl</p>
-<p>检查nginx配置文件是否正确<br>/usr/sbin/nginx -c /etc/nginx/nginx.conf -t<br>nginx -c /etc/nginx/nginx.conf -t<br>检查完没有问题后，就可以reload配置了<br>nginx -s reload</p>
+        <p>markdown语法介绍</p>
+<p>目录（兼容性一般）<br>[Toc]</p>
+<h1 id="标题"><a href="#标题" class="headerlink" title="标题"></a>标题</h1><h1 id="这是标题h1"><a href="#这是标题h1" class="headerlink" title="这是标题h1  "></a>这是标题h1  </h1><h2 id="这是标题h2"><a href="#这是标题h2" class="headerlink" title="这是标题h2  "></a>这是标题h2  </h2><h3 id="这是标题h3"><a href="#这是标题h3" class="headerlink" title="这是标题h3"></a>这是标题h3</h3><h4 id="这是标题h4"><a href="#这是标题h4" class="headerlink" title="这是标题h4"></a>这是标题h4</h4><h5 id="这是标题h5"><a href="#这是标题h5" class="headerlink" title="这是标题h5"></a>这是标题h5</h5><h6 id="这是标题h6"><a href="#这是标题h6" class="headerlink" title="这是标题h6"></a>这是标题h6</h6><h1 id="段落，换行，加粗，斜体"><a href="#段落，换行，加粗，斜体" class="headerlink" title="段落，换行，加粗，斜体"></a>段落，换行，加粗，斜体</h1><p>段落：常规输入生成p标签; <br> 行：行尾空两格或tab缩进生成br标签;<br>加粗：单个 <em> 或 _ 开头，衔接文本，对应的 </em> 或 _ 结尾；<br>斜体：一对 <em> 或 _ 开头，衔接文本，对应的一对 </em> 或 _ 结尾；<br>注意：如果你的 <em> 和 _ 两边都有空白的话，它们就只会被当成普通的符号；也可通过”\”转义，让</em>和\作为普通字符。</p>
+<p>演示：<br>这是普通文本。</p><p>这是普通文本。</p><p></p>
+<p><strong>这是粗体</strong>   <strong>这是粗体</strong></p>
+<p><em>这是斜体</em>   <em>这是斜体</em> </p>
+<h1 id="引用，代码块，分割线"><a href="#引用，代码块，分割线" class="headerlink" title="引用，代码块，分割线"></a>引用，代码块，分割线</h1><p>引用：在每行或段落前面添加”&gt;”符号即可，MD会自动为文本添加blockquote标签；引用可嵌套，即可在”&gt;”里面再输入”&gt;”生成引用块内的引用；引用块内可以使用其他的MD语法，如标题，列表，行内文本表现标识等。</p>
+<blockquote>
+<p>这是一个引用块；<br>也可以这样写,<br>断行可以不用添加”&gt;”符号；</p>
+<blockquote>
+<p>这是子引用。<br>代码块：缩进4个空格或一个tab制表符就能生成代码块，MD会用\&lt;pre>和\&lt;code>标签来把代码区块包起来。只要某一行未缩进，文本就变成普通的文本行。<br>这是一个标准的代码块，由pre包裹code组合而成。<br>注意：在代码区块中，一般的MD语法不会被转换，像是星号便只是星号，这表示你可以很容易地以 Markdown 语法撰写 Markdown 语法相关的文件。</p>
+</blockquote>
+</blockquote>
+<p>分割线：用三个以上的星号(*)、减号(-)、底线( _ )来建立一个分隔线，行内不能有其他东西;也可以在星号或是减号中间插入空格。</p>
+<hr>
+<hr>
+<hr>
+<hr>
+<hr>
+<h1 id="列表"><a href="#列表" class="headerlink" title="列表"></a>列表</h1><p>无序列表：使用星号(*)、加号(+)或减号(-)作为列表标记，标记类型为实心原点。</p>
+<ul>
+<li>列表1</li>
+<li>列表2</li>
+<li>列表3  </li>
+</ul>
+<ul>
+<li>列表1</li>
+<li>列表2</li>
+<li>列表3  </li>
+</ul>
+<ul>
+<li>列表1</li>
+<li>列表2</li>
+<li>列表3 </li>
+</ul>
+<ul><br><li>Bird</li><br><li>McHale</li><br><li>Parish</li><br></ul>
+
+<p>有序列表：使用数字+英文句点+空格作为列表标记。注意：在列表标记上使用的数字并不会影响输出的 HTML 结果，数值可相同也可不连续。</p>
+<ol>
+<li>列表1</li>
+<li>列表2</li>
+<li>列表3  </li>
+</ol>
+<ol><br><li>Bird</li><br><li>McHale</li><br><li>Parish</li><br></ol>
+
+<h1 id="区段元素"><a href="#区段元素" class="headerlink" title="区段元素"></a>区段元素</h1><h2 id="链接"><a href="#链接" class="headerlink" title="链接"></a>链接</h2><p>MD支持两种形式的链接语法：行内式和参考式两种形式。不管是哪一种，链接文字都是用 [方括号] 来标记。</p>
+<p>行内式格式：在方块括号后面紧接着圆括号并插入网址链接即可，如果你还想要加上链接的 title 文字，只要在网址后面，用双引号把 title 文字包起来即可。即：<a href="链接网址" title="title">链接文本</a>；</p>
+<p>参考式格式：在链接文字的括号后面再接上另一个方括号，而在第二个方括号里面要填入用以辨识链接的标记。即：[链接文本][id值]；[id值]:链接网址 “title”；</p>
+<p><a href="http://www.baidu.com/" target="_blank" rel="noopener">百度</a><br>[百度][baidu];[baidu]:<a href="http://www.baidu.com" target="_blank" rel="noopener">http://www.baidu.com</a> “这是百度的链接”<br>注意：id可以有字母、数字、空白和标点符号，但是并不区分大小写;参考式可以省略指定链接标记，这种情形下，链接标记会视为等同于链接文字，如:[baidu][];[baidu]:<a href="http://www.baidu.com" target="_blank" rel="noopener">http://www.baidu.com</a></p>
+<h2 id="图片"><a href="#图片" class="headerlink" title="图片"></a>图片</h2><p>MD使用一种和链接很相似的语法来标记图片，同样也允许两种样式：行内式和参考式。目前还无法为图片设置宽高！</p>
+<p>行内式：<img src="图片地址" alt="图片替代文本" title="title"></p>
+<p>参考式：![alt 图片替代文本][id]; [id]：图片地址 “title”</p>
+<p><img src="https://www.zybuluo.com/static/img/my_head.jpg" alt="我的头像"></p>
+<h2 id="表格"><a href="#表格" class="headerlink" title="表格"></a>表格</h2><table>
+<thead>
+<tr>
+<th>name</th>
+<th style="text-align:right">price</th>
+<th style="text-align:center">remark</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>a</td>
+<td style="text-align:right">1.0</td>
+<td style="text-align:center">hehe</td>
+</tr>
+</tbody>
+</table>
+<table><br>    <tr><br>        <td>Foo</td><br>        <td>Foo</td><br>    </tr><br>      <tr><br>        <td>Foo</td><br>        <td>Foo</td><br>    </tr><br></table>
+
+<h2 id="转义"><a href="#转义" class="headerlink" title="转义"></a>转义</h2><h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><p><code>console.log(&#39;aa&#39;);</code></p>
+<p><code>There is a literal backtick (`) here.</code></p>
+<h2 id="LaTeX-公式"><a href="#LaTeX-公式" class="headerlink" title="LaTeX 公式"></a>LaTeX 公式</h2><p>$ 表示行内公式： </p>
+<p>质能守恒方程可以用一个很简洁的方程式 $E=mc^2$ 来表达。</p>
+<p>$$ 表示整行公式：</p>
+<p>$$\sum_{i=1}^n a_i=0$$</p>
+<p>$$f(x_1,x_x,\ldots,x_n) = x_1^2 + x_2^2 + \cdots + x_n^2 $$</p>
+<p>$$\sum^{j-1}<em>{k=0}{\widehat{\gamma}</em>{kj} z_k}$$</p>
+<h3 id="7-流程图"><a href="#7-流程图" class="headerlink" title="7. 流程图"></a>7. 流程图</h3><h4 id="示例"><a href="#示例" class="headerlink" title="示例"></a>示例</h4><pre><code class="flow">st=&gt;start: Start:&gt;https://www.zybuluo.com
+io=&gt;inputoutput: verification
+op=&gt;operation: Your Operation
+cond=&gt;condition: Yes or No?
+sub=&gt;subroutine: Your Subroutine
+e=&gt;end
+
+st-&gt;io-&gt;op-&gt;cond
+cond(yes)-&gt;e
+cond(no)-&gt;sub-&gt;io
+</code></pre>
+<h3 id="8-序列图"><a href="#8-序列图" class="headerlink" title="8. 序列图"></a>8. 序列图</h3><h4 id="示例-1"><a href="#示例-1" class="headerlink" title="示例 1"></a>示例 1</h4><pre><code class="seq">Alice-&gt;Bob: Hello Bob, how are you?
+Note right of Bob: Bob thinks
+Bob--&gt;Alice: I am good thanks!
+</code></pre>
+<h4 id="示例-2"><a href="#示例-2" class="headerlink" title="示例 2"></a>示例 2</h4><pre><code class="seq">Title: Here is a title
+A-&gt;B: Normal line
+B--&gt;C: Dashed line
+C-&gt;&gt;D: Open arrow
+D--&gt;&gt;A: Dashed open arrow
+
+### 9. 甘特图
+
+甘特图内在思想简单。基本是一条线条图，横轴表示时间，纵轴表示活动（项目），线条表示在整个期间上计划和实际的活动完成情况。它直观地表明任务计划在什么时候进行，及实际进展与计划要求的对比。
+
+```gantt
+    title 项目开发流程
+    section 项目确定
+        需求分析       :a1, 2016-06-22, 3d
+        可行性报告     :after a1, 5d
+        概念验证       : 5d
+    section 项目实施
+        概要设计      :2016-07-05  , 5d
+        详细设计      :2016-07-08, 10d
+        编码          :2016-07-15, 10d
+        测试          :2016-07-22, 5d
+    section 发布验收
+        发布: 2d
+        验收: 3d
+</code></pre>
+<h2 id="格式化文本"><a href="#格式化文本" class="headerlink" title="格式化文本"></a>格式化文本</h2><p>保持输入排版格式不变<br>注：对内含标签需要破坏结构才能显示</p>
+<p>代码</p>
+<pre>
+hello world 
+         hi
+  hello world 
+</pre>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
       
        <hr><span style="font-style: italic;color: gray;"> 转载请注明来源，欢迎对文章中的引用来源进行考证，欢迎指出任何有错误或不够清晰的表达。可以在下面评论区评论，也可以邮件至 zhupengfeivip@163.com </span>
@@ -326,12 +460,12 @@
 
 
 <div class="article_copyright">
-    <p><span>文章标题:</span>Linux常用命令</p>
-    <p><span>文章字数:</span><span class="post-count">1,056</span></p>
+    <p><span>文章标题:</span>markdown语法介绍</p>
+    <p><span>文章字数:</span><span class="post-count">1,326</span></p>
     <p><span>本文作者:</span><a href="javascript:void(0)" title="朱鹏飞">朱鹏飞</a></p>
-    <p><span>发布时间:</span>2018-11-15, 18:47:30</p>
-    <p><span>最后更新:</span>2018-11-15, 18:52:43</p>
-    <span>原始链接:</span><a class="post-url" href="/posts/d0edc1ed/" title="Linux常用命令">https://zhupengfeivip.github.io/posts/d0edc1ed/</a>
+    <p><span>发布时间:</span>2018-11-27, 08:44:31</p>
+    <p><span>最后更新:</span>2018-11-27, 08:45:38</p>
+    <span>原始链接:</span><a class="post-url" href="/posts/945c96b4/" title="markdown语法介绍">https://zhupengfeivip.github.io/posts/945c96b4/</a>
     <p>
         <span>版权声明:</span><i class="fa fa-creative-commons"></i> <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/" title="CC BY-NC-SA 4.0 International" target = "_blank">"署名-非商用-相同方式共享 4.0"</a> 转载请保留原文链接及作者。
     </p>
