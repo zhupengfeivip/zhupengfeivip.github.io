@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
-  <title>朱鹏飞的个人博客</title>
+  <title>朱鹏飞 个人博客 10年开发管理经验 c# nodejs 全栈</title>
   <icon>https://www.gravatar.com/avatar/7f89322964a9242e33f2d40d23df1ac9</icon>
   <subtitle>c# nodejs</subtitle>
   <link href="/atom.xml" rel="self"/>
