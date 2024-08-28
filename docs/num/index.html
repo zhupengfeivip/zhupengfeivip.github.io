@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>数据转换工具</title>
+
+    <!--引入 element-ui 的样式，-->
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+    <!-- 必须先引入vue，  后使用element-ui -->
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.5.17/dist/vue.js"></script>
+    <!-- 引入element 的组件库-->
+    <script src="https://unpkg.com/element-ui/lib/index.js"></script>
+</head>
+
+<body>
+    <div id="demo">
+        <table>
+            <tr>
+                <td>
+                    <el-input v-model="hex" placeholder="16进制"></el-input>
+                </td>
+                <td>
+                    <el-button type="primary" @click="hexChange">转换</el-button>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <el-input v-model="dec" placeholder="10进制"></el-input>
+                </td>
+                <td>
+                    <el-button type="primary" @click="decChange">转换</el-button>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <el-input v-model="sec" placeholder="二进制"></el-input>
+                </td>
+                <td>
+                    <el-button type="primary" @click="secChange">转换</el-button>
+                </td>
+            </tr>
+        </table>
+    </div>
+    <script>
+        new Vue({
+            el: '#demo',
+            data: {
+                formInline: {
+                    user: '',
+                    region: ''
+                },
+                hex: 10,
+                dec: 10,
+                sec: 10,
+                message: 'Hello Vue.js!'
+            },
+            methods: {
+                /**
+                 * 
+                 */
+                hexChange() {
+                    // alert('aa')
+                    this.dec = parseInt(this.hex, 16)
+                    this.sec = this.dec.toString(2)
+                },
+                decChange() {
+                    this.hex = this.dec.toString(16)
+                    this.sec = this.dec.toString(2)
+                },
+                secChange() {
+                    this.dec = parseInt(this.sec, 2)
+                    this.hex = this.dec.toString(16)
+                }
+            }
+        })
+    </script>
+</body>
+
+</html>
