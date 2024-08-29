@@ -18,6 +18,18 @@
         .dataInput {
             width: 100%;
         }
+
+        .bit-begin-label {
+            background: #236104;
+        }
+
+        .bit-begin-content {
+            background: #FDE2E2;
+        }
+
+        .highlight {
+            background-color: yellow;
+        }
     </style>
 </head>
 
@@ -32,6 +44,10 @@
         <el-input v-model="sec" class="dataInput" placeholder="二进制" @input="secChange">
             <template slot="prepend">02进制</template>
         </el-input><br />
+        <el-descriptions title="二进制列表" direction="vertical" style="padding-top: 20px;" :column="80" border>
+            <el-descriptions-item v-for="item in secList" :label="item.label"
+                :content-class-name="{ 'highlight': shouldHighlight(item) }">{{item.value}}</el-descriptions-item>
+        </el-descriptions>
     </div>
     <script>
         new Vue({
@@ -41,10 +57,16 @@
                     user: '',
                     region: ''
                 },
-                hex: 0,
-                dec: 0,
-                sec: 0,
+                hex: 'A',
+                dec: 255,
+                sec: "1010",
+                secList: [],
                 message: 'Hello Vue.js!'
+            },
+            mounted: function () {
+                // 页面加载完成后执行的操作
+                console.log('Component has been mounted.');
+                this.decChange(); // 假设 fetchData 是一个异步获取数据的方法
             },
             methods: {
                 /**
@@ -54,14 +76,31 @@
                     // alert('aa')
                     this.dec = parseInt(this.hex, 16)
                     this.sec = this.dec.toString(2)
+                    this.secToList()
                 },
                 decChange() {
+                    this.dec = parseInt(this.dec)
                     this.hex = this.dec.toString(16).toUpperCase()
                     this.sec = this.dec.toString(2)
+                    this.secToList()
                 },
                 secChange() {
                     this.dec = parseInt(this.sec, 2)
                     this.hex = this.dec.toString(16).toUpperCase()
+                    this.secToList()
+                },
+                secToList() {
+                    this.secList = []
+                    let index = 0
+                    for (let i = this.sec.length - 1; i >= 0; i--) {
+                        this.secList.push({ label: "bit" + (i % 8), value: this.sec[i] })
+                    }
+
+                    // console.log(this.secList)
+                },
+                shouldHighlight(item) {
+                    // 这里可以根据 item 的属性来决定是否需要高亮
+                    return item.label == "bit0";
                 }
             }
         })
