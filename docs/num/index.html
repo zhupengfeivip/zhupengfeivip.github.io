@@ -13,36 +13,25 @@
     <script src="https://cdn.jsdelivr.net/npm/vue@2.5.17/dist/vue.js"></script>
     <!-- 引入element 的组件库-->
     <script src="https://unpkg.com/element-ui/lib/index.js"></script>
+    <!--自定义样式设置-->
+    <style>
+        .dataInput {
+            width: 100%;
+        }
+    </style>
 </head>
 
 <body>
     <div id="demo">
-        <table>
-            <tr>
-                <td>
-                    <el-input v-model="hex" placeholder="16进制" @input="hexChange"></el-input>
-                </td>
-                <td>
-                    <el-button type="primary" @click="hexChange">转换</el-button>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <el-input v-model="dec" placeholder="10进制" @input="decChange"></el-input>
-                </td>
-                <td>
-                    <el-button type="primary" @click="decChange">转换</el-button>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <el-input v-model="sec" placeholder="二进制" @input="secChange"></el-input>
-                </td>
-                <td>
-                    <el-button type="primary" @click="secChange">转换</el-button>
-                </td>
-            </tr>
-        </table>
+        <el-input v-model="hex" class="dataInput" placeholder="16进制" @input="hexChange">
+            <template slot="prepend">16进制</template>
+        </el-input><br />
+        <el-input v-model="dec" class="dataInput" placeholder="10进制" @input="decChange">
+            <template slot="prepend">10进制</template>
+        </el-input><br />
+        <el-input v-model="sec" class="dataInput" placeholder="二进制" @input="secChange">
+            <template slot="prepend">02进制</template>
+        </el-input><br />
     </div>
     <script>
         new Vue({
@@ -52,9 +41,9 @@
                     user: '',
                     region: ''
                 },
-                hex: 10,
-                dec: 10,
-                sec: 10,
+                hex: 0,
+                dec: 0,
+                sec: 0,
                 message: 'Hello Vue.js!'
             },
             methods: {
