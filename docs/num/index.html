@@ -28,6 +28,10 @@
         }
 
         .highlight {
+            background-color: rgb(145, 214, 156);
+        }
+
+        .highlight2 {
             background-color: yellow;
         }
     </style>
@@ -48,7 +52,7 @@
         </el-input><br />
         <el-descriptions title="二进制列表" direction="vertical" style="padding-top: 20px;" :column="80" border>
             <el-descriptions-item v-for="item in secList" :label="item.label"
-                :content-class-name="{ 'highlight': shouldHighlight(item) }">{{item.value}}</el-descriptions-item>
+                :content-class-name="{ 'highlight': shouldHighlight(item), 'highlight2': shouldHighlight2(item) }">{{item.value}}</el-descriptions-item>
         </el-descriptions>
     </div>
     <script>
@@ -94,15 +98,25 @@
                 secToList() {
                     this.secList = []
                     let index = 0
+                    let byteNo = 1
                     for (let i = this.sec.length - 1; i >= 0; i--) {
-                        this.secList.push({ label: "bit" + (i % 8), value: this.sec[i] })
+                        this.secList.push({ label: "bit" + (index), value: this.sec[i], byteNo: byteNo })
+                        index++
+                        if (index == 8) {
+                            index = 0
+                            byteNo++
+                        }
                     }
-
-                    // console.log(this.secList)
+                    this.secList.reverse()
+                    console.log(this.secList)
                 },
                 shouldHighlight(item) {
                     // 这里可以根据 item 的属性来决定是否需要高亮
-                    return item.label == "bit0";
+                    return item.byteNo % 2 == 0;
+                },
+                shouldHighlight2(item) {
+                    // 这里可以根据 item 的属性来决定是否需要高亮
+                    return item.byteNo % 2 != 0;
                 }
             }
         })
