@@ -19,6 +19,11 @@
             width: 100%;
         }
 
+        .el-input-group__prepend {
+            width: 150px;
+            text-align: right;
+        }
+
         .bit-begin-label {
             background: #236104;
         }
@@ -42,13 +47,16 @@
 <body>
     <div id="demo">
         <el-input v-model="hex" class="dataInput" placeholder="16进制" @input="hexChange">
-            <template slot="prepend">16进制</template>
+            <template class="dataLabel" style="width: 200px;" slot="prepend">16进制</template>
         </el-input><br />
-        <el-input v-model="dec" class="dataInput" placeholder="10进制" @input="decChange">
-            <template slot="prepend">10进制</template>
+        <el-input v-model="uDec" class="dataInput" placeholder="10进制(无符号)" @input="decChange">
+            <template class="dataLabel" slot="prepend">10进制(无符号)</template>
+        </el-input><br />
+        <el-input v-model="dec" class="dataInput" placeholder="10进制(有符号)" @input="decChange">
+            <template class="dataLabel" slot="prepend">10进制(有符号)</template>
         </el-input><br />
         <el-input v-model="sec" class="dataInput" placeholder="二进制" @input="secChange">
-            <template slot="prepend">02进制</template>
+            <template class="dataLabel" slot="prepend">2进制</template>
         </el-input><br />
         <el-descriptions title="二进制列表" direction="vertical" style="padding-top: 20px;" :column="80" border>
             <el-descriptions-item v-for="item in secList" :label="item.label"
@@ -63,8 +71,13 @@
                     user: '',
                     region: ''
                 },
+                // 16进制
                 hex: 'A',
+                // 10进制 无符号
+                uDec: 255,
+                // 10进制 有符号
                 dec: 255,
+                // 2进制
                 sec: "1010",
                 secList: [],
                 message: 'Hello Vue.js!'
@@ -76,23 +89,26 @@
             },
             methods: {
                 /**
-                 * 
+                 * 根据16进制转换其他进制
                  */
                 hexChange() {
-                    // alert('aa')
-                    this.dec = parseInt(this.hex, 16)
-                    this.sec = this.dec.toString(2)
+                    this.uDec = parseInt(this.hex, 16)
+                    this.dec = this.HexToDec(this.hex)
+                    this.sec = this.uDec.toString(2)
                     this.secToList()
                 },
+                // 根据无符号十进制转换其他进制
                 decChange() {
-                    this.dec = parseInt(this.dec)
+                    this.uDec = parseInt(this.uDec)
                     this.hex = this.dec.toString(16).toUpperCase()
                     this.sec = this.dec.toString(2)
                     this.secToList()
                 },
+                // 根据2进制转换其他进制
                 secChange() {
-                    this.dec = parseInt(this.sec, 2)
-                    this.hex = this.dec.toString(16).toUpperCase()
+                    this.uDec = parseInt(this.sec, 2)
+                    this.hex = this.uDec.toString(16).toUpperCase()
+                    this.dec = this.HexToDec(this.hex)
                     this.secToList()
                 },
                 secToList() {
@@ -109,6 +125,42 @@
                     }
                     this.secList.reverse()
                     console.log(this.secList)
+                },
+                // 16进制转有符号10进制
+                HexToDec(i) {
+                    if (i == null)
+                        return 0
+
+                    i = i.trim()
+                    if (i == "")
+                        return 0
+
+                    if (i.length % 2 !== 0)
+                        i = "0" + i
+
+                    let two = parseInt(i, 16).toString(2)
+                    let bitNum = i.length * 4
+                    if (two.length < bitNum) {
+                        while (two.length < bitNum) {
+                            two = "0" + two
+                        }
+                    }
+                    // console.log(i, bitNum, two)
+                    if (two.substring(0, 1) == "0") {
+                        two = parseInt(two, 2)
+                        return two;
+                    } else {
+                        let two_unsign = "";
+                        two = parseInt(two, 2) - 1
+                        two = two.toString(2)
+                        two_unsign = two.substring(1, bitNum);
+                        two_unsign = two_unsign.replace(/0/g, "z")
+                        two_unsign = two_unsign.replace(/1/g, "0")
+                        two_unsign = two_unsign.replace(/z/g, "1")
+                        two = parseInt(-two_unsign, 2)
+
+                        return two
+                    }
                 },
                 shouldHighlight(item) {
                     // 这里可以根据 item 的属性来决定是否需要高亮

@@ -524,7 +524,6 @@
             return (s);
         }
 
-        ///////////////////////////////////////////////////////////////////////////////
         var cld;
 
         function drawCld(SY, SM) {
@@ -543,10 +542,12 @@
                 gdObj.style.backgroundColor = ""
                 sObj.className = 'SD';
                 sD = i - cld.firstWeek;
-                if (sD > -1 && sD < cld.length) { //日期内
+                if (sD > -1 && sD < cld.length) {
+                    //日期数字
                     sObj.innerHTML = sD + 1;
-                    var s_m = SM + 1, s_d = sD + 1,
-                        h_t = (s_m < 10 ? ('0' + s_m) : s_m) + '' + (s_d < 10 ? ('0' + s_d) : s_d);
+                    var s_m = SM + 1
+                    var s_d = sD + 1
+                    var h_t = (s_m < 10 ? ('0' + s_m) : s_m) + '' + (s_d < 10 ? ('0' + s_d) : s_d);
                     var workT;
                     var work_T = worktime["y" + SY];
                     if (work_T != undefined) {
@@ -567,23 +568,36 @@
                     } else {
                         wObj.innerHTML = "<br>";
                     }
-                    if (cld[sD].isToday) sObj.className = 'SD todyaColor'; //今日颜色
+                    //今日颜色
+                    if (cld[sD].isToday) {
+                        sObj.className = 'SD todyaColor';
+                    }
                     sObj.style.color = cld[sD].color; //法定假日颜色
-                    if (cld[sD].lDay == 1) //显示农历月
+
+                    if (cld[sD].lDay == 1)
+                    {
+                        //农历第一天显示显示农历月份，其他天显示农历
                         lObj.innerHTML = '<b>' + (cld[sD].isLeap ? '闰' : '') + cld[sD].lMonth + '月' + (monthDays(cld[sD].lYear, cld[sD].lMonth) == 29 ? '小' : '大') + '</b>';
-                    else //显示农历日
+                    }
+                    else
+                    {
+                        //显示农历日
                         lObj.innerHTML = cDay(cld[sD].lDay);
+                    }
                     s = cld[sD].lunarFestival;
-                    if (s.length > 0) { //农历节日
+                    if (s.length > 0) {
+                        //农历节日
                         if (s.length > 6) s = s.substr(0, 4) + '..';
                         s = s.fontcolor('red');
-                    } else { //公历节日
+                    } else {
+                        //公历节日
                         s = cld[sD].solarFestival;
                         if (s.length > 0) {
                             size = (s.charCodeAt(0) > 0 && s.charCodeAt(0) < 128) ? 8 : 4;
                             if (s.length > size + 2) s = s.substr(0, size) + '..';
                             s = (s == '黑色星期五') ? s.fontcolor('black') : s.fontcolor('blue');
-                        } else { //廿四节气
+                        } else {
+                            //廿四节气
                             s = cld[sD].solarTerms;
                             if (s.length > 0) s = s.fontcolor('limegreen');
                         }
@@ -897,15 +911,15 @@
                             <td bgcolor="#000080" colspan="7">
                                 <font style="FONT-SIZE: 9pt" color="#ffffff" size="2">公历
                                     <select style="FONT-SIZE: 9pt" onchange="changeCld()" name="SY">
-                                        <script language="JavaScript"><!--
+                                        <script language="JavaScript">
                                         for (i = 1900; i < 2050; i++) document.write('<option>' + i)
-                                        //--></script>
+                                        </script>
                                     </select>
                                     年
                                     <select style="FONT-SIZE: 9pt" onchange="changeCld()" name="SM">
-                                        <script language="JavaScript"><!--
+                                        <script language="JavaScript">
                                         for (i = 1; i < 13; i++) document.write('<option>' + i)
-                                        //--></script>
+                                        </script>
                                     </select>
                                     月 </font><font id="GZ" face="标楷体" color="yellow" size="3"></font><br>
                             </td>
@@ -933,22 +947,32 @@
                                 <font color="green">六</font>
                             </td>
                         </tr>
-                        <script language="JavaScript"><!--
+                        <script language="JavaScript">
                         var gNum
                         for (i = 0; i < 6; i++) {
                             document.write('<tr align="center">')
+                            // j 0为周日，6为周六
                             for (j = 0; j < 7; j++) {
                                 gNum = i * 7 + j
                                 document.write('<td id="GD' + gNum + '" onMouseOver="mOvr(' + gNum + ')" onMouseOut="mOut()"><font id="WT' + gNum + '" class="WT"></font><font id="SD' + gNum + '" class="SD"')
-                                if (j == 0) document.write(' color=red')
-                                if (j == 6)
-                                    if (i % 2 == 1) document.write(' color=red')
-                                    else document.write(' color=green')
+                                if (j == 0) {
+                                    // 周日
+                                    document.write(' color=red')
+                                }
+                                else if (j == 6){
+                                    // 周六
+                                    if (i % 2 == 1) {
+                                        document.write(' color=red')
+                                    }
+                                    else {
+                                        document.write(' color=green')
+                                    }
+                                }
                                 document.write(' TITLE=""> </font><br><font id="LD' + gNum + '" size=2 style="font-size:9pt"> </font></td>')
                             }
                             document.write('</tr>')
                         }
-                        //--></script>
+                        </script>
                         </tbody>
                     </table>
                 </td>
