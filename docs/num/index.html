@@ -16,12 +16,14 @@
     <!--自定义样式设置-->
     <style>
         .dataInput {
-            width: 100%;
+            width: 500px;
         }
 
+        /* 标签样式 */
         .el-input-group__prepend {
             width: 150px;
             text-align: right;
+            color: black;
         }
 
         .bit-begin-label {
@@ -40,23 +42,25 @@
             background-color: yellow;
         }
     </style>
-
     <link rel="icon" href="imgs/logo.svg" type="image/svg+xml">
 </head>
 
 <body>
     <div id="demo">
         <el-input v-model="hex" class="dataInput" placeholder="16进制" @input="hexChange">
-            <template class="dataLabel" style="width: 200px;" slot="prepend">16进制</template>
-        </el-input><br />
+            <template style="width: 200px;" slot="prepend">16进制</template>
+        </el-input> <el-radio-group v-model="hexType" @change="hexChange">
+            <el-radio-button label="little">低字节在前</el-radio-button>
+            <el-radio-button label="big">高字节在前</el-radio-button>
+        </el-radio-group><br />
         <el-input v-model="uDec" class="dataInput" placeholder="10进制(无符号)" @input="decChange">
-            <template class="dataLabel" slot="prepend">10进制(无符号)</template>
+            <template slot="prepend">10进制(无符号)</template>
         </el-input><br />
         <el-input v-model="dec" class="dataInput" placeholder="10进制(有符号)" @input="decChange">
-            <template class="dataLabel" slot="prepend">10进制(有符号)</template>
+            <template slot="prepend">10进制(有符号)</template>
         </el-input><br />
         <el-input v-model="sec" class="dataInput" placeholder="二进制" @input="secChange">
-            <template class="dataLabel" slot="prepend">2进制</template>
+            <template slot="prepend">2进制</template>
         </el-input><br />
         <el-descriptions title="二进制列表" direction="vertical" style="padding-top: 20px;" :column="80" border>
             <el-descriptions-item v-for="item in secList" :label="item.label"
@@ -73,6 +77,7 @@
                 },
                 // 16进制
                 hex: 'A',
+                hexType: 'big',    // big: 高字节在前，little: 低字节在前
                 // 10进制 无符号
                 uDec: 255,
                 // 10进制 有符号
@@ -92,9 +97,32 @@
                  * 根据16进制转换其他进制
                  */
                 hexChange() {
-                    this.uDec = parseInt(this.hex, 16)
+                    console.log('hexType', this.hexType)
+                    // 10进制(无符号)
+                    // 低字节在前时，则反转字符串
+                    if (this.hexType == 'little') {
+                        let hexStr = this.hex.trim()
+                        if (hexStr == "")
+                            return 0
+
+                        // 如果不是双位数，则前面补0
+                        if (hexStr.length % 2 !== 0)
+                            hexStr = "0" + hexStr
+
+                        // 低字节在前时，则反转字符串
+                        if (this.hexType == 'little') {
+                            hexStr = this.reverseString(hexStr)
+                        }
+                        this.uDec = parseInt(hexStr, 16)
+                    }
+                    else {
+                        this.uDec = parseInt(this.hex, 16)
+                    }
+                    // 10进制(有符号)
                     this.dec = this.HexToDec(this.hex)
+                    // 2进制
                     this.sec = this.uDec.toString(2)
+                    // 2进制列表
                     this.secToList()
                 },
                 // 根据无符号十进制转换其他进制
@@ -127,25 +155,32 @@
                     console.log(this.secList)
                 },
                 // 16进制转有符号10进制
-                HexToDec(i) {
-                    if (i == null)
+                HexToDec(hexStr) {
+                    if (hexStr == null)
                         return 0
 
-                    i = i.trim()
-                    if (i == "")
+                    hexStr = hexStr.trim()
+                    if (hexStr == "")
                         return 0
 
-                    if (i.length % 2 !== 0)
-                        i = "0" + i
+                    // 如果不是双位数，则前面补0
+                    if (hexStr.length % 2 !== 0)
+                        hexStr = "0" + hexStr
 
-                    let two = parseInt(i, 16).toString(2)
-                    let bitNum = i.length * 4
+                    // 低字节在前时，则反转字符串
+                    if (this.hexType == 'little') {
+                        hexStr = this.reverseString(hexStr)
+                    }
+
+                    // 二进制码
+                    let two = parseInt(hexStr, 16).toString(2)
+                    let bitNum = hexStr.length * 4
                     if (two.length < bitNum) {
                         while (two.length < bitNum) {
                             two = "0" + two
                         }
                     }
-                    // console.log(i, bitNum, two)
+                    console.log(hexStr, bitNum, two)
                     if (two.substring(0, 1) == "0") {
                         two = parseInt(two, 2)
                         return two;
@@ -161,6 +196,14 @@
 
                         return two
                     }
+                },
+                // 翻转字符串，如将"010203"翻转为"030201"
+                reverseString(str) {
+                    let byteArr = []
+                    for (let i = str.length - 2; i >= 0; i -= 2) {
+                        byteArr.push(str.substr(i, 2))
+                    }
+                    return byteArr.join('')
                 },
                 shouldHighlight(item) {
                     // 这里可以根据 item 的属性来决定是否需要高亮
