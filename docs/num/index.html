@@ -53,7 +53,7 @@
             <el-radio-button label="little">低字节在前</el-radio-button>
             <el-radio-button label="big">高字节在前</el-radio-button>
         </el-radio-group><br />
-        <el-input v-model="uDec" class="dataInput" placeholder="10进制(无符号)" @input="decChange">
+        <el-input v-model="uDec" class="dataInput" placeholder="10进制(无符号)" @input="uDecChange">
             <template slot="prepend">10进制(无符号)</template>
         </el-input><br />
         <el-input v-model="dec" class="dataInput" placeholder="10进制(有符号)" @input="decChange">
@@ -126,10 +126,28 @@
                     this.secToList()
                 },
                 // 根据无符号十进制转换其他进制
-                decChange() {
+                uDecChange() {
                     this.uDec = parseInt(this.uDec)
-                    this.hex = this.dec.toString(16).toUpperCase()
+                    this.dec = this.uDec
+                    this.hex = this.uDec.toString(16).toUpperCase()
                     this.sec = this.dec.toString(2)
+                    this.secToList()
+                },
+                // 根据有符号十进制转换其他进制
+                decChange() {
+                    let decInt = parseInt(this.dec)
+                    if (isNaN(decInt)) {
+                        return
+                    }
+                    if (decInt < 0) {
+                        this.uDec = Math.pow(2, 32) + decInt
+                    }
+                    else {
+                        this.uDec = decInt
+                    }
+
+                    this.hex = this.uDec.toString(16).toUpperCase()
+                    this.sec = this.uDec.toString(2)
                     this.secToList()
                 },
                 // 根据2进制转换其他进制
@@ -152,7 +170,7 @@
                         }
                     }
                     this.secList.reverse()
-                    console.log(this.secList)
+                    // console.log(this.secList)
                 },
                 // 16进制转有符号10进制
                 HexToDec(hexStr) {
