@@ -98,6 +98,7 @@
                  */
                 hexChange() {
                     console.log('hexType', this.hexType)
+                    this.hex = this.hex.trim().replace(/[^0-9a-fA-F]/g, '');
                     // 10进制(无符号)
                     // 低字节在前时，则反转字符串
                     if (this.hexType == 'little') {
