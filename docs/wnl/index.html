@@ -4,17 +4,15 @@
 <head>
     <meta charset="UTF-8">
     <title>万年历查询 日历查询 农历查询 农历日历 老黄历 万年历表</title>
-    <meta content="农历; 阳历; 月历; 节日; 时区; 节气; 八字; 干支; 生肖; gregorian solar; chinese lunar; calendar;"
-          name="keywords">
+    <meta content="农历; 阳历; 月历; 节日; 时区; 节气; 八字; 干支; 生肖; gregorian solar; chinese lunar; calendar;" name="keywords">
     <meta content="All" name="robots">
     <meta content="gregorian solar calendar and chinese lunar calendar" name="description">
-    <meta http-equiv="x-ua-compatible" content="ie=7"/>
+    <meta http-equiv="x-ua-compatible" content="ie=7" />
     <style type="text/css">
         p {
             fONT-FAMILY: 宋体;
             FONT-SIZE: 9pt;
-            line-height: 12pt:
-            color: #000000
+            line-height: 12pt: color: #000000
         }
 
         TD {
@@ -269,7 +267,7 @@
         /*****************************************************************************
          日期计算
          *****************************************************************************/
-//====================================== 返回农历 y年的总天数
+        //====================================== 返回农历 y年的总天数
         function lYearDays(y) {
             var i, sum = 348;
             for (i = 0x8000; i > 0x8; i >>= 1) sum += (lunarInfo[y - 1900] & i) ? 1 : 0;
@@ -309,7 +307,7 @@
             leap = leapMonth(i); //闰哪个月
             this.isLeap = false;
             for (i = 1; i < 13 && offset > 0; i++) {
-//闰月
+                //闰月
                 if (leap > 0 && i == (leap + 1) && this.isLeap == false) {
                     --i;
                     this.isLeap = true;
@@ -317,7 +315,7 @@
                 } else {
                     temp = monthDays(this.year, i);
                 }
-//解除闰月
+                //解除闰月
                 if (this.isLeap == true && i == (leap + 1)) this.isLeap = false;
                 offset -= temp;
             }
@@ -352,17 +350,17 @@
         //============================== 阴历属性
         function calElement(sYear, sMonth, sDay, week, lYear, lMonth, lDay, isLeap, cYear, cMonth, cDay) {
             this.isToday = false;
-//瓣句
+            //瓣句
             this.sYear = sYear;   //公元年4位数字
             this.sMonth = sMonth;  //公元月数字
             this.sDay = sDay;    //公元日数字
             this.week = week;    //星期, 1个中文
-//农历
+            //农历
             this.lYear = lYear;   //公元年4位数字
             this.lMonth = lMonth;  //农历月数字
             this.lDay = lDay;    //农历日数字
             this.isLeap = isLeap;  //是否为农历闰月?
-//八字
+            //八字
             this.cYear = cYear;   //年柱, 2个中文
             this.cMonth = cMonth;  //月柱, 2个中文
             this.cDay = cDay;    //日柱, 2个中文
@@ -397,15 +395,15 @@
             sDObj = new Date(y, m, 1, 0, 0, 0, 0);    //当月一日日期
             this.length = solarDays(y, m);    //公历当月天数
             this.firstWeek = sDObj.getDay();    //公历当月1日星期几
-////////年柱 1900年立春后为庚子年(60进制36)
+            ////////年柱 1900年立春后为庚子年(60进制36)
             if (m < 2) cY = cyclical(y - 1900 + 36 - 1);
             else cY = cyclical(y - 1900 + 36);
             var term2 = sTerm(y, 2); //立春日期
-////////月柱 1900年1月小寒以前为 丙子月(60进制12)
+            ////////月柱 1900年1月小寒以前为 丙子月(60进制12)
             var firstNode = sTerm(y, m * 2) //返回当月「节」为几日开始
             cM = cyclical((y - 1900) * 12 + m + 12);
-//当月一日与 1900/1/1 相差天数
-//1900/1/1与 1970/1/1 相差25567日, 1900/1/1 日柱为甲戌日(60进制10)
+            //当月一日与 1900/1/1 相差天数
+            //1900/1/1与 1970/1/1 相差25567日, 1900/1/1 日柱为甲戌日(60进制10)
             var dayCyclical = Date.UTC(y, m, 1, 0, 0, 0, 0) / 86400000 + 25567 + 10;
             for (var i = 0; i < this.length; i++) {
                 if (lD > lX) {
@@ -419,33 +417,33 @@
                     if (n == 0) firstLM = lM;
                     lDPOS[n++] = i - lD + 1;
                 }
-//依节气调整二月分的年柱, 以立春为界
+                //依节气调整二月分的年柱, 以立春为界
                 if (m == 1 && (i + 1) == term2) cY = cyclical(y - 1900 + 36);
-//依节气月柱, 以「节」为界
+                //依节气月柱, 以「节」为界
                 if ((i + 1) == firstNode) cM = cyclical((y - 1900) * 12 + m + 13);
-//日柱
+                //日柱
                 cD = cyclical(dayCyclical + i);
-//sYear,sMonth,sDay,week,
-//lYear,lMonth,lDay,isLeap,
-//cYear,cMonth,cDay
+                //sYear,sMonth,sDay,week,
+                //lYear,lMonth,lDay,isLeap,
+                //cYear,cMonth,cDay
                 this[i] = new calElement(y, m + 1, i + 1, nStr1[(i + this.firstWeek) % 7],
                     lY, lM, lD++, lL,
                     cY, cM, cD);
             }
-//节气
+            //节气
             tmp1 = sTerm(y, m * 2) - 1;
             tmp2 = sTerm(y, m * 2 + 1) - 1;
             this[tmp1].solarTerms = solarTerm[m * 2];
             this[tmp2].solarTerms = solarTerm[m * 2 + 1];
             if (m == 3) this[tmp1].color = 'red'; //清明颜色
-//公历节日
+            //公历节日
             for (i in sFtv)
                 if (sFtv[i].match(/^(\d{2})(\d{2})([\s\*])(.+)$/))
                     if (Number(RegExp.$1) == (m + 1)) {
                         this[Number(RegExp.$2) - 1].solarFestival += RegExp.$4 + ' ';
                         if (RegExp.$3 == '*') this[Number(RegExp.$2) - 1].color = 'red';
                     }
-//月周节日
+            //月周节日
             for (i in wFtv)
                 if (wFtv[i].match(/^(\d{2})(\d)(\d)([\s\*])(.+)$/))
                     if (Number(RegExp.$1) == (m + 1)) {
@@ -459,7 +457,7 @@
                             this[this.length - tmp3 - 7 * tmp1 + tmp2 - (tmp2 > tmp3 ? 7 : 0) - 1].solarFestival += RegExp.$5 + ' ';
                         }
                     }
-//农历节日
+            //农历节日
             for (i in lFtv)
                 if (lFtv[i].match(/^(\d{2})(.{2})([\s\*])(.+)$/)) {
                     tmp1 = Number(RegExp.$1) - firstLM;
@@ -472,17 +470,17 @@
                         }
                     }
                 }
-//复活节只出现在3或4月
+            //复活节只出现在3或4月
             if (m == 2 || m == 3) {
                 var estDay = new easter(y);
                 if (m == estDay.m)
                     this[estDay.d - 1].solarFestival = this[estDay.d - 1].solarFestival + ' 复活节 Easter Sunday';
             }
             if (m == 2) this[20].solarFestival = this[20].solarFestival + unescape('%20%u6D35%u8CE2%u751F%u65E5');
-//黑色星期五
+            //黑色星期五
             if ((this.firstWeek + 12) % 7 == 5)
                 this[12].solarFestival += '黑色星期五';
-//今日
+            //今日
             if (y == tY && m == tM) this[tD - 1].isToday = true;
         }
 
@@ -495,7 +493,7 @@
                 var lMlen = 15 - lDayTerm2.day;
             else
                 var lMlen = (lDayTerm2.isLeap ? leapDays(y) : monthDays(y, lDayTerm2.month)) - lDayTerm2.day + 15;
-//一天等于 1000*60*60*24 = 86400000 毫秒
+            //一天等于 1000*60*60*24 = 86400000 毫秒
             var l15 = new Date(dayTerm2.getTime() + 86400000 * lMlen); //求出第一次月圆为公历几日
             var dayEaster = new Date(l15.getTime() + 86400000 * (7 - l15.getUTCDay())); //求出下个周日
             this.m = dayEaster.getUTCMonth();
@@ -517,7 +515,7 @@
                     s = '三十';
                     break;
                     break;
-                default :
+                default:
                     s = nStr2[Math.floor(d / 10)];
                     s += nStr1[d % 10];
             }
@@ -574,13 +572,11 @@
                     }
                     sObj.style.color = cld[sD].color; //法定假日颜色
 
-                    if (cld[sD].lDay == 1)
-                    {
+                    if (cld[sD].lDay == 1) {
                         //农历第一天显示显示农历月份，其他天显示农历
                         lObj.innerHTML = '<b>' + (cld[sD].isLeap ? '闰' : '') + cld[sD].lMonth + '月' + (monthDays(cld[sD].lYear, cld[sD].lMonth) == 29 ? '小' : '大') + '</b>';
                     }
-                    else
-                    {
+                    else {
                         //显示农历日
                         lObj.innerHTML = cDay(cld[sD].lDay);
                     }
@@ -624,13 +620,13 @@
 
         function pushBtm(K) {
             switch (K) {
-                case 'YU' :
+                case 'YU':
                     if (CLD.SY.selectedIndex > 0) CLD.SY.selectedIndex--;
                     break;
-                case 'YD' :
+                case 'YD':
                     if (CLD.SY.selectedIndex < 150) CLD.SY.selectedIndex++;
                     break;
-                case 'MU' :
+                case 'MU':
                     if (CLD.SM.selectedIndex > 0) {
                         CLD.SM.selectedIndex--;
                     } else {
@@ -638,7 +634,7 @@
                         if (CLD.SY.selectedIndex > 0) CLD.SY.selectedIndex--;
                     }
                     break;
-                case 'MD' :
+                case 'MD':
                     if (CLD.SM.selectedIndex < 11) {
                         CLD.SM.selectedIndex++;
                     } else {
@@ -646,7 +642,7 @@
                         if (CLD.SY.selectedIndex < 150) CLD.SY.selectedIndex++;
                     }
                     break;
-                default :
+                default:
                     CLD.SY.selectedIndex = tY - 1900;
                     CLD.SM.selectedIndex = tM;
             }
@@ -674,9 +670,9 @@
             var s, festival;
             var sObj = eval('SD' + v);
             var d = sObj.innerHTML - 1;
-//sYear,sMonth,sDay,week,
-//lYear,lMonth,lDay,isLeap,
-//cYear,cMonth,cDay
+            //sYear,sMonth,sDay,week,
+            //lYear,lMonth,lDay,isLeap,
+            //cYear,cMonth,cDay
             if (sObj.innerHTML != '') {
                 sObj.style.cursor = 's-resize';
                 if (cld[d].solarTerms == '' && cld[d].solarFestival == '' && cld[d].lunarFestival == '')
@@ -781,7 +777,7 @@
             //alert(UTC)
             y = UTC.getFullYear();
             UTC.setMinutes(UTC.getMinutes() - (-T.slice(1, 3) * 60 - T.slice(3, 5)) * PlusMinus);
-//alert(UTC)
+            //alert(UTC)
             //美国国会于2005年通过扩大日光节约时间法案，将原来开始时间从4月的第一个星期日，提早到3月的第二个星期日；结束时间则从10月的最后一个星期日，延长到11月的第一个星期日。
             var dtmDaylightSavingBegin, dtmDaylightSavingEnd;
             dtmDaylightSavingBegin = new Date(y, 3, 0);
@@ -818,305 +814,324 @@
         }
     </style>
     <meta content="MSHTML 6.00.2800.1505" name="GENERATOR">
+    <script>
+        var _hmt = _hmt || [];
+        (function () {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?2108db1df7afe9d0fa799e88bbd47e7c";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
 </head>
+
 <body leftmargin="0" topmargin="0">
-<script language="JavaScript">
-    lck = 0;
+    <script language="JavaScript">
+        lck = 0;
 
-    function r(hval) {
-        if (lck == 0) {
-            document.bgColor = hval;
+        function r(hval) {
+            if (lck == 0) {
+                document.bgColor = hval;
+            }
         }
-    }
-</script>
-<div id="detail" style="POSITION: absolute">
-</div>
-<center>
-    <form name="CLD" onsubmit="return false">
-        <table>
-            <tbody>
-            <tr>
-                <td valign="top" align="middle">
-                    <br>
-                    <font style="FONT-SIZE: 9pt" size="2">本机时间:</font><br>
-                    <font id="Clock" face="Arial" color="#000080" size="4" align="center"></font>
-                    <p>
-                        <!--时区 *表示自动调整为日光节约时间--><font style="FONT-SIZE: 9pt" size="2">
-                        <select style="FONT-SIZE: 9pt" onchange="changeTZ()" name="TZ">
-                            <option value="-1200 安尼威土克、瓜甲兰" selected>国际换日线
-                            <option value="-1100 中途岛、萨摩亚群岛">萨摩亚
-                            <option value="-1000 夏威夷">夏威夷
-                            <option value="-0900*阿拉斯加">阿拉斯加
-                            <option value="-0800*太平洋时间(美加)、提亚纳">太平洋
-                            <option value="-0700*亚历桑那">美国山区
-                            <option value="-0700*山区时间(美加)">美加山区
-                            <option value="-0600*萨克其万(加拿大)">加拿大中部
-                            <option value="-0600*墨西哥市、塔克西卡帕">墨西哥
-                            <option value="-0600*中部时间(美加)">美加中部
-                            <option value="-0500*波哥大、里玛">南美洲太平洋
-                            <option value="-0500*东部时间(美加)">美加东部
-                            <option value="-0500*印第安纳(东部)">美东
-                            <option value="-0400*加拉卡斯、拉帕兹">南美洲西部
-                            <option value="-0400*大西洋时间 加拿大)">大西洋
-                            <option value="-0330 新岛(加拿大东岸)">纽芬兰
-                            <option value="-0300 波西尼亚">东南美洲
-                            <option value="-0300 布鲁诺斯爱丽斯、乔治城">南美洲东部
-                            <option value="-0200*大西洋中部">大西洋中部
-                            <option value="-0100*亚速尔群岛、维德角群岛">亚速尔
-                            <option value="+0000 格林威治时间、都柏林、爱丁堡、伦敦">英国夏令
-                            <option value="+0000 莫洛维亚(赖比瑞亚)、卡萨布兰卡">格林威治标准
-                            <option value="+0100 巴黎、马德里">罗马
-                            <option value="+0100 布拉格, 华沙, 布达佩斯">中欧
-                            <option value="+0100 柏林、斯德哥尔摩、罗马、伯恩、布鲁赛尔、维也纳">西欧
-                            <option value="+0200 以色列">以色列
-                            <option value="+0200*东欧">东欧
-                            <option value="+0200*开罗">埃及
-                            <option value="+0200*雅典、赫尔辛基、伊斯坦堡">GFT
-                            <option value="+0200*赫拉雷、皮托里">南非
-                            <option value="+0300*巴格达、科威特、奈洛比(肯亚)、里雅德(沙乌地)">沙乌地阿拉伯
-                            <option value="+0300*莫斯科、圣彼得堡、贺占、窝瓦格瑞德">俄罗斯
-                            <option value="+0330*德黑兰">伊朗
-                            <option value="+0400*阿布达比(东阿拉伯)、莫斯凯、塔布理斯(乔治亚共和)">阿拉伯
-                            <option value="+0430*喀布尔">阿富汗
-                            <option value="+0500 伊斯兰马巴德、克洛奇、伊卡特林堡、塔须肯">西亚
-                            <option value="+0530 孟买、加尔各答、马垂斯、新德里、可伦坡">印度
-                            <option value="+0600 阿马提、达卡">中亚
-                            <option value="+0700 曼谷、亚加达、胡志明市">曼谷
-                            <option value="+0800 北京、重庆、黑龙江">中国
-                            <option value="+0800 台湾、香港、新加坡">台北
-                            <option value="+0900 东京、大阪、扎幌、汉城、亚库兹(东西伯利亚)">东京
-                            <option value="+0930 达尔文">澳洲中部
-                            <option value="+1000 布里斯本、墨尔本、席德尼">席德尼
-                            <option value="+1000 霍巴特">塔斯梅尼亚
-                            <option value="+1000 关岛、莫斯比港、海 威">西太平洋
-                            <option value="+1100*马哥大、所罗门群岛、新卡伦多尼亚">太平洋中部
-                            <option value="+1200 威灵顿、奥克兰">纽西兰
-                            <option value="+1200 斐济、肯加塔、马歇尔群岛">斐济</option>
-                        </select>
-                        时间 </font><br>
-                        <font id="Clock2" face="Arial" color="#000080" size="4" align="center"></font><br>
-                        <font style="FONT-SIZE: 120pt; COLOR: green; FONT-FAMILY:Webdings" id="worldmap">û</font><br>
-                        <font id="CITY"
-                              style="FONT-SIZE: 9pt; WIDTH: 150px; COLOR: blue; FONT-FAMILY: '新细明体'"></font>
-                    </p>
-                </td>
-                <td align="middle">
-                    <div style="Z-INDEX: -1; POSITION: absolute; TOP: 30px">
-                        <font id="YMBG" style="FONT-SIZE: 90pt; COLOR: #f0f0f0; FONT-FAMILY: 'Arial Black'"> 0000<br>
-                             JUN</font>
-                    </div>
-                    <table border="0">
-                        <tbody>
-                        <tr>
-                            <td bgcolor="#000080" colspan="7">
-                                <font style="FONT-SIZE: 9pt" color="#ffffff" size="2">公历
-                                    <select style="FONT-SIZE: 9pt" onchange="changeCld()" name="SY">
-                                        <script language="JavaScript">
-                                        for (i = 1900; i < 2050; i++) document.write('<option>' + i)
-                                        </script>
+    </script>
+    <div id="detail" style="POSITION: absolute">
+    </div>
+    <center>
+        <form name="CLD" onsubmit="return false">
+            <table>
+                <tbody>
+                    <tr>
+                        <td valign="top" align="middle">
+                            <br>
+                            <font style="FONT-SIZE: 9pt" size="2">本机时间:</font><br>
+                            <font id="Clock" face="Arial" color="#000080" size="4" align="center"></font>
+                            <p>
+                                <!--时区 *表示自动调整为日光节约时间-->
+                                <font style="FONT-SIZE: 9pt" size="2">
+                                    <select style="FONT-SIZE: 9pt" onchange="changeTZ()" name="TZ">
+                                        <option value="-1200 安尼威土克、瓜甲兰" selected>国际换日线
+                                        <option value="-1100 中途岛、萨摩亚群岛">萨摩亚
+                                        <option value="-1000 夏威夷">夏威夷
+                                        <option value="-0900*阿拉斯加">阿拉斯加
+                                        <option value="-0800*太平洋时间(美加)、提亚纳">太平洋
+                                        <option value="-0700*亚历桑那">美国山区
+                                        <option value="-0700*山区时间(美加)">美加山区
+                                        <option value="-0600*萨克其万(加拿大)">加拿大中部
+                                        <option value="-0600*墨西哥市、塔克西卡帕">墨西哥
+                                        <option value="-0600*中部时间(美加)">美加中部
+                                        <option value="-0500*波哥大、里玛">南美洲太平洋
+                                        <option value="-0500*东部时间(美加)">美加东部
+                                        <option value="-0500*印第安纳(东部)">美东
+                                        <option value="-0400*加拉卡斯、拉帕兹">南美洲西部
+                                        <option value="-0400*大西洋时间 加拿大)">大西洋
+                                        <option value="-0330 新岛(加拿大东岸)">纽芬兰
+                                        <option value="-0300 波西尼亚">东南美洲
+                                        <option value="-0300 布鲁诺斯爱丽斯、乔治城">南美洲东部
+                                        <option value="-0200*大西洋中部">大西洋中部
+                                        <option value="-0100*亚速尔群岛、维德角群岛">亚速尔
+                                        <option value="+0000 格林威治时间、都柏林、爱丁堡、伦敦">英国夏令
+                                        <option value="+0000 莫洛维亚(赖比瑞亚)、卡萨布兰卡">格林威治标准
+                                        <option value="+0100 巴黎、马德里">罗马
+                                        <option value="+0100 布拉格, 华沙, 布达佩斯">中欧
+                                        <option value="+0100 柏林、斯德哥尔摩、罗马、伯恩、布鲁赛尔、维也纳">西欧
+                                        <option value="+0200 以色列">以色列
+                                        <option value="+0200*东欧">东欧
+                                        <option value="+0200*开罗">埃及
+                                        <option value="+0200*雅典、赫尔辛基、伊斯坦堡">GFT
+                                        <option value="+0200*赫拉雷、皮托里">南非
+                                        <option value="+0300*巴格达、科威特、奈洛比(肯亚)、里雅德(沙乌地)">沙乌地阿拉伯
+                                        <option value="+0300*莫斯科、圣彼得堡、贺占、窝瓦格瑞德">俄罗斯
+                                        <option value="+0330*德黑兰">伊朗
+                                        <option value="+0400*阿布达比(东阿拉伯)、莫斯凯、塔布理斯(乔治亚共和)">阿拉伯
+                                        <option value="+0430*喀布尔">阿富汗
+                                        <option value="+0500 伊斯兰马巴德、克洛奇、伊卡特林堡、塔须肯">西亚
+                                        <option value="+0530 孟买、加尔各答、马垂斯、新德里、可伦坡">印度
+                                        <option value="+0600 阿马提、达卡">中亚
+                                        <option value="+0700 曼谷、亚加达、胡志明市">曼谷
+                                        <option value="+0800 北京、重庆、黑龙江">中国
+                                        <option value="+0800 台湾、香港、新加坡">台北
+                                        <option value="+0900 东京、大阪、扎幌、汉城、亚库兹(东西伯利亚)">东京
+                                        <option value="+0930 达尔文">澳洲中部
+                                        <option value="+1000 布里斯本、墨尔本、席德尼">席德尼
+                                        <option value="+1000 霍巴特">塔斯梅尼亚
+                                        <option value="+1000 关岛、莫斯比港、海 威">西太平洋
+                                        <option value="+1100*马哥大、所罗门群岛、新卡伦多尼亚">太平洋中部
+                                        <option value="+1200 威灵顿、奥克兰">纽西兰
+                                        <option value="+1200 斐济、肯加塔、马歇尔群岛">斐济</option>
                                     </select>
-                                    年
-                                    <select style="FONT-SIZE: 9pt" onchange="changeCld()" name="SM">
-                                        <script language="JavaScript">
-                                        for (i = 1; i < 13; i++) document.write('<option>' + i)
-                                        </script>
-                                    </select>
-                                    月 </font><font id="GZ" face="标楷体" color="yellow" size="3"></font><br>
-                            </td>
-                        </tr>
-                        <tr align="middle" bgcolor="#e0e0e0">
-                            <td width="60">
-                                <font color="red">日</font>
-                            </td>
-                            <td width="60">
-                                一
-                            </td>
-                            <td width="60">
-                                二
-                            </td>
-                            <td width="60">
-                                三
-                            </td>
-                            <td width="60">
-                                四
-                            </td>
-                            <td width="60">
-                                五
-                            </td>
-                            <td width="60">
-                                <font color="green">六</font>
-                            </td>
-                        </tr>
-                        <script language="JavaScript">
-                        var gNum
-                        for (i = 0; i < 6; i++) {
-                            document.write('<tr align="center">')
-                            // j 0为周日，6为周六
-                            for (j = 0; j < 7; j++) {
-                                gNum = i * 7 + j
-                                document.write('<td id="GD' + gNum + '" onMouseOver="mOvr(' + gNum + ')" onMouseOut="mOut()"><font id="WT' + gNum + '" class="WT"></font><font id="SD' + gNum + '" class="SD"')
-                                if (j == 0) {
-                                    // 周日
-                                    document.write(' color=red')
-                                }
-                                else if (j == 6){
-                                    // 周六
-                                    if (i % 2 == 1) {
-                                        document.write(' color=red')
-                                    }
-                                    else {
-                                        document.write(' color=green')
-                                    }
-                                }
-                                document.write(' TITLE=""> </font><br><font id="LD' + gNum + '" size=2 style="font-size:9pt"> </font></td>')
-                            }
-                            document.write('</tr>')
-                        }
-                        </script>
-                        </tbody>
-                    </table>
-                </td>
-                <td valign="top" align="middle" width="40">
-                    <br>
-                    <br>
-                    <br>
-                    <br>
-                    <button style="FONT-SIZE: 9pt" onclick="pushBtm('YU')">年↑</button>
-                    <br>
-                    <button style="FONT-SIZE: 9pt" onclick="pushBtm('YD')">年↓</button>
-                    <p>
-                        <button style="FONT-SIZE: 9pt" onclick="pushBtm('MU')">月↑</button>
-                        <br>
-                        <button style="FONT-SIZE: 9pt" onclick="pushBtm('MD')">月↓</button>
-                    <p>
-                        <button style="FONT-SIZE: 9pt" onclick="pushBtm('')">今日</button>
-                    </p>
-                </td>
-            </tr>
-            </tbody>
-        </table>
-    </form>
-    <p>
-    </p>
-    <hr width="90%" color="#cccccc" noshade size="1">
-    <font style="FONT-SIZE: 9pt" face="ARIAL" size="2">阳历中<font color="red">红色</font>/<font
-            color="green">绿色</font><font color="black">表示<a href="#"
-                                                                onclick="getHoliday();return false;"><b>节假日</b></a>，农历中<font
-            color="green">绿色</font>表示为24节气日，<font color="red">红色</font>表示为传统节日，<font
-            color="blue">蓝色</font>则表示为公众节假日<br>
-        <script type="text/javascript">
-            <!--
-            initial();
-            //-->
-        </script>
-
-        <!-- 以下函数同步节假日 -->
-        <script type="text/javascript">
-            <!--
-            function getHoliday() {
-                // 注意：dataType: json 就行了，别写成 jsonp 了
-                // 使用 jQuery，其它库请查看api
-                // 可以使用new Date().getFullYear()指定年份，空字符串表示当年
-                var holidayYear = new Date().getFullYear();
-                ajaxConfig = {
-                    type: 'get',
-                    url: `http://timor.tech/api/holiday/year/${holidayYear}?type=Y&week=N`,    //holidayYear：指定年份，为可选项
-                    dataType: 'json',
-                    data: {
-                        name: 'xuexi',
-                        sex: '学习'
-                    },
-                    success: function (respData) {
-                        var responseData = JSON.parse(respData);
-                        var holiday = responseData.holiday;
-                        //需要构造一个类似的字符串，worktime.y2016 = JSON.parse('{"d0101":{"w":"放假"},"d0102":{"w":"放假"},"d0103":{"w":"放假"},"d0206":{"w":"上班"}}');
-                        var currYear = 'y' + (holidayYear == "" ? new Date().getFullYear() : holidayYear);
-                        worktime[currYear] = new Object();
-
-                        for (var key in holiday) {
-                            var dayKey = "d" + key.replace("-", "");
-                            worktime[currYear][dayKey] = {};
-                            worktime[currYear][dayKey].w = holiday[key].name.includes("补班") ? "补班" : holiday[key].name;
-                        }
+                                    时间
+                                </font><br>
+                                <font id="Clock2" face="Arial" color="#000080" size="4" align="center"></font><br>
+                                <font style="FONT-SIZE: 120pt; COLOR: green; FONT-FAMILY:Webdings" id="worldmap">û
+                                </font><br>
+                                <font id="CITY" style="FONT-SIZE: 9pt; WIDTH: 150px; COLOR: blue; FONT-FAMILY: '新细明体'">
+                                </font>
+                            </p>
+                        </td>
+                        <td align="middle">
+                            <div style="Z-INDEX: -1; POSITION: absolute; TOP: 30px">
+                                <font id="YMBG" style="FONT-SIZE: 90pt; COLOR: #f0f0f0; FONT-FAMILY: 'Arial Black'">
+                                     0000<br>
+                                     JUN</font>
+                            </div>
+                            <table border="0">
+                                <tbody>
+                                    <tr>
+                                        <td bgcolor="#000080" colspan="7">
+                                            <font style="FONT-SIZE: 9pt" color="#ffffff" size="2">公历
+                                                <select style="FONT-SIZE: 9pt" onchange="changeCld()" name="SY">
+                                                    <script language="JavaScript">
+                                                        for (i = 1900; i < 2050; i++) document.write('<option>' + i)
+                                                    </script>
+                                                </select>
+                                                年
+                                                <select style="FONT-SIZE: 9pt" onchange="changeCld()" name="SM">
+                                                    <script language="JavaScript">
+                                                        for (i = 1; i < 13; i++) document.write('<option>' + i)
+                                                    </script>
+                                                </select>
+                                                月
+                                            </font>
+                                            <font id="GZ" face="标楷体" color="yellow" size="3"></font><br>
+                                        </td>
+                                    </tr>
+                                    <tr align="middle" bgcolor="#e0e0e0">
+                                        <td width="60">
+                                            <font color="red">日</font>
+                                        </td>
+                                        <td width="60">
+                                            一
+                                        </td>
+                                        <td width="60">
+                                            二
+                                        </td>
+                                        <td width="60">
+                                            三
+                                        </td>
+                                        <td width="60">
+                                            四
+                                        </td>
+                                        <td width="60">
+                                            五
+                                        </td>
+                                        <td width="60">
+                                            <font color="green">六</font>
+                                        </td>
+                                    </tr>
+                                    <script language="JavaScript">
+                                        var gNum
+                                        for (i = 0; i < 6; i++) {
+                                            document.write('<tr align="center">')
+                                            // j 0为周日，6为周六
+                                            for (j = 0; j < 7; j++) {
+                                                gNum = i * 7 + j
+                                                document.write('<td id="GD' + gNum + '" onMouseOver="mOvr(' + gNum + ')" onMouseOut="mOut()"><font id="WT' + gNum + '" class="WT"></font><font id="SD' + gNum + '" class="SD"')
+                                                if (j == 0) {
+                                                    // 周日
+                                                    document.write(' color=red')
+                                                }
+                                                else if (j == 6) {
+                                                    // 周六
+                                                    if (i % 2 == 1) {
+                                                        document.write(' color=red')
+                                                    }
+                                                    else {
+                                                        document.write(' color=green')
+                                                    }
+                                                }
+                                                document.write(' TITLE=""> </font><br><font id="LD' + gNum + '" size=2 style="font-size:9pt"> </font></td>')
+                                            }
+                                            document.write('</tr>')
+                                        }
+                                    </script>
+                                </tbody>
+                            </table>
+                        </td>
+                        <td valign="top" align="middle" width="40">
+                            <br>
+                            <br>
+                            <br>
+                            <br>
+                            <button style="FONT-SIZE: 9pt" onclick="pushBtm('YU')">年↑</button>
+                            <br>
+                            <button style="FONT-SIZE: 9pt" onclick="pushBtm('YD')">年↓</button>
+                            <p>
+                                <button style="FONT-SIZE: 9pt" onclick="pushBtm('MU')">月↑</button>
+                                <br>
+                                <button style="FONT-SIZE: 9pt" onclick="pushBtm('MD')">月↓</button>
+                            <p>
+                                <button style="FONT-SIZE: 9pt" onclick="pushBtm('')">今日</button>
+                            </p>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </form>
+        <p>
+        </p>
+        <hr width="90%" color="#cccccc" noshade size="1">
+        <font style="FONT-SIZE: 9pt" face="ARIAL" size="2">阳历中<font color="red">红色</font>/<font color="green">绿色</font>
+            <font color="black">表示<a href="#" onclick="getHoliday();return false;"><b>节假日</b></a>，农历中<font
+                    color="green">绿色</font>表示为24节气日，<font color="red">红色</font>表示为传统节日，<font color="blue">蓝色</font>
+                则表示为公众节假日<br>
+                <script type="text/javascript">
+                    < !-
                         initial();
-                        console.log("worktime." + currYear + " = JSON.parse('" + JSON.stringify(worktime[currYear]) + "');")
-                    },
-                    error: function (xhr, textstatus, error) {
-                        console.log('error', textstatus, error)
+                    //-->
+                </script>
+
+                <!-- 以下函数同步节假日 -->
+                <script type="text/javascript">
+                    <!--
+                    function getHoliday() {
+                        // 注意：dataType: json 就行了，别写成 jsonp 了
+                        // 使用 jQuery，其它库请查看api
+                        // 可以使用new Date().getFullYear()指定年份，空字符串表示当年
+                        var holidayYear = new Date().getFullYear();
+                        ajaxConfig = {
+                            type: 'get',
+                            url: `http://timor.tech/api/holiday/year/${holidayYear}?type=Y&week=N`,    //holidayYear：指定年份，为可选项
+                            dataType: 'json',
+                            data: {
+                                name: 'xuexi',
+                                sex: '学习'
+                            },
+                            success: function (respData) {
+                                var responseData = JSON.parse(respData);
+                                var holiday = responseData.holiday;
+                                //需要构造一个类似的字符串，worktime.y2016 = JSON.parse('{"d0101":{"w":"放假"},"d0102":{"w":"放假"},"d0103":{"w":"放假"},"d0206":{"w":"上班"}}');
+                                var currYear = 'y' + (holidayYear == "" ? new Date().getFullYear() : holidayYear);
+                                worktime[currYear] = new Object();
+        
+                                for (var key in holiday) {
+                                    var dayKey = "d" + key.replace("-", "");
+                                    worktime[currYear][dayKey] = {};
+                                    worktime[currYear][dayKey].w = holiday[key].name.includes("补班") ? "补班" : holiday[key].name;
+                                }
+                                initial();
+                                console.log("worktime." + currYear + " = JSON.parse('" + JSON.stringify(worktime[currYear]) + "');")
+                            },
+                            error: function (xhr, textstatus, error) {
+                                console.log('error', textstatus, error)
+                            }
+                        }
+        
+                        console.log("请求Url：", ajaxConfig.url);
+                        ajaxRequest(ajaxConfig)
+        
                     }
-                }
+        
+                    function ajaxRequest(paramObj, successFun, errorFun) {
+                        var xmlhttp = null;
+                        /*创建XMLHttpRequest对象，
+                         *老版本的 Internet Explorer（IE5 和 IE6）使用 ActiveX 对象：new ActiveXObject("Microsoft.XMLHTTP")
+                         * */
+                    if (window.XMLHttpRequest) {
+                        xmlhttp = new XMLHttpRequest();
+                    } else if (window.ActiveXObject) {
+                        xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+                    }
+                    /*判断是否支持请求*/
+                    if (xmlhttp == null) {
+                        alert('你的浏览器不支持XMLHttp');
+                        return;
+                    }
+                    /*请求方式，并且转换为大写*/
+                    var httpType = (paramObj.type || 'GET').toUpperCase();
+                    /*数据类型*/
+                    var dataType = paramObj.dataType || 'json';
+                    /*请求接口*/
+                    var url = paramObj.url || '';
+                    /*是否异步请求*/
+                    var async = paramObj.async || true;
+                    /*请求参数--post请求参数格式为：foo=bar&lorem=ipsum*/
+                    var paramData = paramObj.data || [];
+                    var requestData = '';
+                    for (var name in paramData) {
+                        requestData += name + '=' + paramData[name] + '&';
+                    }
+                    requestData = requestData == '' ? '' : requestData.substring(0, requestData.length - 1);
 
-                console.log("请求Url：", ajaxConfig.url);
-                ajaxRequest(ajaxConfig)
+                    /*请求接收,可以监听onreadystatechange，或onloadend事件*/
+                    xmlhttp.onloadend = function () {
+                        if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+                            /*成功回调函数*/
+                            successFun != undefined ? successFun(xmlhttp.responseText) : paramObj.success(xmlhttp.responseText);
+                        } else {
+                            /*失败回调函数*/
+                            console.error("Error occurred while fetching data."); // 若有错误则打印错误信息
+                            errorFun != undefined ? errorFun(xmlhttp, xmlhttp.status, "error...") : paramObj.error(xmlhttp, xmlhttp.status, "error...");
+                        }
+                    }
 
+                    /*接口连接，先判断连接类型是post还是get*/
+                    if (httpType == 'GET') {
+                        xmlhttp.open("GET", url, async);
+                        xmlhttp.send(null);
+                    } else if (httpType == 'POST') {
+                        xmlhttp.open("POST", url, async);
+                        //发送合适的请求头信息
+                        xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+                        xmlhttp.send(requestData);
+                    }
             }
 
-            function ajaxRequest(paramObj, successFun, errorFun) {
-                var xmlhttp = null;
-                /*创建XMLHttpRequest对象，
-                 *老版本的 Internet Explorer（IE5 和 IE6）使用 ActiveX 对象：new ActiveXObject("Microsoft.XMLHTTP")
-                 * */
-                if (window.XMLHttpRequest) {
-                    xmlhttp = new XMLHttpRequest();
-                } else if (window.ActiveXObject) {
-                    xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
-                }
-                /*判断是否支持请求*/
-                if (xmlhttp == null) {
-                    alert('你的浏览器不支持XMLHttp');
-                    return;
-                }
-                /*请求方式，并且转换为大写*/
-                var httpType = (paramObj.type || 'GET').toUpperCase();
-                /*数据类型*/
-                var dataType = paramObj.dataType || 'json';
-                /*请求接口*/
-                var url = paramObj.url || '';
-                /*是否异步请求*/
-                var async = paramObj.async || true;
-                /*请求参数--post请求参数格式为：foo=bar&lorem=ipsum*/
-                var paramData = paramObj.data || [];
-                var requestData = '';
-                for (var name in paramData) {
-                    requestData += name + '=' + paramData[name] + '&';
-                }
-                requestData = requestData == '' ? '' : requestData.substring(0, requestData.length - 1);
+                    //-->
 
-                /*请求接收,可以监听onreadystatechange，或onloadend事件*/
-                xmlhttp.onloadend = function () {
-                    if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-                        /*成功回调函数*/
-                        successFun != undefined ? successFun(xmlhttp.responseText) : paramObj.success(xmlhttp.responseText);
-                    } else {
-                        /*失败回调函数*/
-                        console.error("Error occurred while fetching data."); // 若有错误则打印错误信息
-                        errorFun != undefined ? errorFun(xmlhttp, xmlhttp.status, "error...") : paramObj.error(xmlhttp, xmlhttp.status, "error...");
-                    }
-                }
-
-                /*接口连接，先判断连接类型是post还是get*/
-                if (httpType == 'GET') {
-                    xmlhttp.open("GET", url, async);
-                    xmlhttp.send(null);
-                } else if (httpType == 'POST') {
-                    xmlhttp.open("POST", url, async);
-                    //发送合适的请求头信息
-                    xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-                    xmlhttp.send(requestData);
-                }
-            }
-
-            //-->
-
-        </script>
-</center>
-<br>
-<table align="center" border="0" cellpadding="3" cellspacing="0" width="700">
-    <tr>
-        <td align="center">
-            <b><font color="#008000"></font></b>
-        </td>
-    </tr>
-</table>
+                </script>
+    </center>
+    <br>
+    <table align="center" border="0" cellpadding="3" cellspacing="0" width="700">
+        <tr>
+            <td align="center">
+                <b>
+                    <font color="#008000"></font>
+                </b>
+            </td>
+        </tr>
+    </table>
 </body>
+
 </html>
